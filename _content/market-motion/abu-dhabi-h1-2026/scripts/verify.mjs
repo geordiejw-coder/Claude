@@ -18,7 +18,6 @@ const LOCKED = {
   rateSource: 'Source: Savills Abu Dhabi Residential Market · Q2 2026',
   rateCaveat: 'Average transaction rates; project mix affects comparison.',
   legal: 'The Prop Co Real Estate Space LLC OPC · Broker Licence No. 202400892044',
-  firstClaimCaveat: 'Abu Dhabi City residential unit sales; excludes residential complexes, duplexes and penthouses.',
 };
 
 let ok = true;
@@ -46,7 +45,6 @@ check(cp.apartments.display === LOCKED.rateApartments && cp.apartments.value ===
 check(cp.villasTownhouses.display === LOCKED.rateVillasTownhouses && cp.villasTownhouses.value === 12100 && cp.villasTownhouses.label === 'Villas & Townhouses', 'Savills villas & townhouses = AED 12,100 / SQM');
 check(cp.source === LOCKED.rateSource && cp.caveat === LOCKED.rateCaveat, 'Savills source + caveat');
 check(d.legal === LOCKED.legal, 'legal line');
-check(d.firstClaimCaveat === LOCKED.firstClaimCaveat, '15,500 scope caveat text');
 // Display strings must agree with their numeric values (no re-rounding).
 check(Number(pm.residential.display.replace(/[+%]/g, '')) === pm.residential.value, 'CBRE display/value agree');
 check(Number(cp.apartments.display.replace(/[^\d]/g, '')) === cp.apartments.value && Number(cp.villasTownhouses.display.replace(/[^\d]/g, '')) === cp.villasTownhouses.value, 'Savills display/value agree');

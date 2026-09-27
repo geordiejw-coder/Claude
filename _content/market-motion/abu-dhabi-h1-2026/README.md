@@ -1,6 +1,6 @@
 # sp_ce — Abu Dhabi City Residential Market, H1 2026 · market-motion film
 
-A code-rendered, vertical market-motion film for Instagram Reels (1080 × 1920, 30 fps, 47.4 s, H.264, no audio), built in Remotion.
+A code-rendered, vertical market-motion film for Instagram Reels (1080 × 1920, 30 fps, 47.2 s, H.264, no audio), built in Remotion.
 Every mark on screen is drawn from code: no image generation, stock footage or AI imagery.
 
 | Output | Path |
@@ -51,6 +51,18 @@ compare them with the reference itself.
 - **Deliberately not copied.** The reference's subject matter, artwork, branding, palette, typefaces and specific shots.
   The film also avoids real-estate clichés (buildings, keys, aerials, handshakes), hype language and CTAs.
 
+## Latest changes (client review)
+
+- **Scope caveat removed.** The line under 15,500 ("Abu Dhabi City residential unit sales; excludes residential
+  complexes, duplexes and penthouses.") has been removed. The city scope note stays in the H1 summary footer.
+- **The ending no longer morphs.**
+  - "find your" appears in white, with "space" beneath it in an Ice Blue to Soft Violet gradient.
+  - The official `sp_ce` SVG then fades in above them (opacity only, 800 ms), followed by the licence line. It sits
+    at a proportional size (320 px visible width), on whole pixels, with no transform.
+  - The earlier stretch-and-snap into the logo is gone, so the final frame can't jump. This was checked frame by
+    frame in the exported MP4.
+  - The end card holds for 2.5 s once complete.
+
 ## sp_ce design-system pack: status for this job
 
 The pack (`/sp_ce-design-system-pack`, v1.0.0) was read after the film was approved. The client chose
@@ -76,7 +88,7 @@ as approved exceptions for this job.
 3. The licence line on every scene with a market claim.
 4. Safe area x 96–984, y 220–1600.
 5. The official `small.svg` (white) is used as the logo, rather than the pack's PNG.
-6. The morph ending ("find your" / "space" → sp_ce).
+6. The ending: "find your" / "space" with the official logo fading in (no morph).
 7. The three-number summary, and two rates on one frame.
 8. Title in capitals.
 9. Source-line wording kept as approved.

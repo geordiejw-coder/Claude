@@ -197,11 +197,6 @@ export const Film: React.FC = () => {
                   {M.transactions.yoy.display}
                 </div>
               </Fade>
-              <div style={{height: 12}} />
-              {/* scope caveat beside the first 15,500 claim */}
-              <Fade inP={seg(t, LAST_LANDING + 0.0, LAST_LANDING + 0.35)} outP={seg(t, 8.2, 8.6)}>
-                <div style={{fontSize: 24, fontWeight: W_SOURCE, lineHeight: 1.35, color: MUTED, maxWidth: COL_W}}>{data.firstClaimCaveat}</div>
-              </Fade>
             </div>
           )}
           {t > 9.0 && t < 18.6 && (

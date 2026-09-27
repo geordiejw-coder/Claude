@@ -1,6 +1,6 @@
 // Signature-ending configuration, measured from the OFFICIAL logo file
 // public/brand/sp_ce-logo.svg (supplied as small.svg; white wordmark, viewBox 342 × 144).
-// The morph lands each letter on these glyph extents, then cross-fades onto the SVG itself.
+// Glyph extents are used to size and centre the logo by its visible artwork.
 export const LOGO = {
   file: 'brand/sp_ce-logo.svg',
   viewW: 342,
