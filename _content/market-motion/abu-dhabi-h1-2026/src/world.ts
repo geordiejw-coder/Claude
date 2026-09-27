@@ -7,7 +7,7 @@ import data from '../data/market.json';
 export const W = 1080;
 export const H = 1920;
 export const FPS = 30;
-export const DURATION_S = 32.4;
+export const DURATION_S = 40.2;
 export const DURATION = Math.round(FPS * DURATION_S);
 
 // One light point per recorded transaction.
@@ -46,17 +46,18 @@ export function mulberry32(seed: number) {
 const CAM_KEYS: number[][] = [
   [-2, 0.0, 1.0, -10.5, 5, -6, 0, 0.56],
   [0, 0.0, 1.05, -8.6, 6, -5, 0.6, 0.56],
-  [3, 0.15, 1.3, -6.4, 9, -2.5, 0.3, 0.6],
-  [8, 0.35, 2.0, -4.0, 14, 2.0, -0.4, 0.62],
-  [12.5, 0.9, 3.4, -3.2, 19, 7.5, -0.8, 0.63],
-  [15.5, 0.2, 5.0, -3.0, 30, 1.5, 0.2, 0.6],
-  [18, -0.1, 6.2, -4.0, 33, -1.5, 0.4, 0.62],
-  [22, 0.0, 5.0, -12.0, 14, 0.5, 0, 0.66],
-  [24, 0.0, 4.8, -13.6, 13, 1.0, 0, 0.66],
+  [3, 0.15, 1.3, -6.4, 9, -2.5, 0.3, 0.62],
+  [8, 0.35, 2.0, -4.0, 14, 2.0, -0.4, 0.645],
+  [12.5, 0.9, 3.4, -3.2, 19, 7.5, -0.8, 0.675],
+  [15.5, 0.2, 5.0, -3.0, 30, 1.5, 0.2, 0.675],
+  [18, -0.1, 6.2, -4.0, 33, -1.5, 0.4, 0.655],
+  [22, 0.0, 5.0, -12.0, 14, 0.5, 0, 0.63],
+  [25, 0.1, 4.85, -13.4, 13.5, 1.2, 0, 0.63],
   // extension: slow lateral drift under the publisher scenes and the ending
-  [28, 0.7, 4.3, -15.2, 11, 4.0, 0, 0.64],
-  [32.4, 1.2, 3.9, -16.8, 9, 6.5, 0, 0.62],
-  [35, 1.4, 3.7, -17.6, 8, 7.5, 0, 0.62],
+  [30.5, 0.7, 4.3, -15.2, 11, 4.0, 0, 0.64],
+  [35.5, 1.2, 3.9, -16.8, 9, 6.5, 0, 0.62],
+  [40.2, 1.5, 3.7, -18.0, 8, 7.5, 0, 0.62],
+  [43, 1.7, 3.6, -18.8, 8, 8.0, 0, 0.62],
 ];
 
 export type Cam = {
@@ -129,7 +130,7 @@ export function lift(t: number): number {
   const up = inOutCubic(seg(t, 8.0, 10.8));
   const down = inOutCubic(seg(t, 12.9, 15.0));
   const flat = inOutCubic(seg(t, 17.6, 20.0));
-  return 3.1 * up * (1 - 0.88 * down) * (1 - flat);
+  return 2.75 * up * (1 - 0.88 * down) * (1 - flat);
 }
 
 // Flow of the field (along +z), shared by particles and annotations.
@@ -144,16 +145,16 @@ export const SPLIT_GAP = 0.55;
 
 // Timeline anchors for the revision (seconds).
 export const T = {
-  recapOut: 20.95, // H1 recap leaves
-  priceIn: 21.5, priceOut: 24.75, // CBRE price momentum
-  rateIn: 24.9, rateOut: 28.35, // Savills current pricing
-  endIn: 28.45, // signature ending
+  recapOut: 25.0, // H1 three-number summary leaves (readable ~20.4–25.0)
+  priceIn: 25.7, priceOut: 30.5, // CBRE price momentum
+  rateIn: 30.7, rateOut: 35.5, // Savills current pricing
+  endIn: 35.6, // signature ending
 };
 
 // The Cavendish particle field recedes when other publishers' figures are on
 // screen, so no scene reads as one merged series.
 export function fieldPresence(t: number) {
-  return 1 - 0.72 * smooth(seg(t, 20.9, 22.0)) - 0.2 * smooth(seg(t, 28.2, 29.4));
+  return 1 - 0.9 * smooth(seg(t, T.recapOut, T.recapOut + 1.0));
 }
 
 // -------------------------------------------------------------- particles
@@ -240,8 +241,8 @@ export function particleAt(i: number, t: number, s: PState): void {
   const k = clamp01(tl / P.travel[i]);
   if (k < 1) {
     const e = outCubic(k);
-    const sx = x + P.jit[j] * 1.6, sy = 1.4 + (P.jit[j + 1] + 1) * 1.6, sz = z - 1.2 - (P.jit[j + 2] + 1) * 1.4;
-    const cx = x + P.jit[j + 2] * 0.9, cy = y + 0.5, cz = z - 0.2;
+    const sx = x + P.jit[j] * 1.6, sy = 0.35 + (P.jit[j + 1] + 1) * 0.42, sz = z - 1.2 - (P.jit[j + 2] + 1) * 1.4;
+    const cx = x + P.jit[j + 2] * 0.9, cy = y + 0.25, cz = z - 0.2;
     const a1 = 1 - e;
     x = a1 * a1 * sx + 2 * a1 * e * cx + e * e * x;
     y = a1 * a1 * sy + 2 * a1 * e * cy + e * e * y;
@@ -294,7 +295,7 @@ export function anchors(t: number) {
   const crest = project(c, px, L * TERRAIN_MAX, pz, o) ? {x: o[0], y: o[1]} : null;
   const ghost = project(c, px, (L * TERRAIN_MAX) / VALUE_MULT, pz, o) ? {x: o[0], y: o[1]} : null;
   // scale bar across the split stream, at a fixed depth in front of camera
-  const zb = 3.2;
+  const zb = 6.0;
   const zfb = clamp01((zb - Z0) / ZLEN);
   const k = splitK(t, zfb);
   const sk = settleK(t);
@@ -305,4 +306,31 @@ export function anchors(t: number) {
   const xr = adj(lerp(laneX(1, zb, t), splitX(false, 1, zb, t), k));
   const pt = (x: number) => (project(c, x, 0, zb, o) ? {x: o[0], y: o[1]} : null);
   return {crest, ghost, bar: {l: pt(xl), m1: pt(xm1), m2: pt(xm2), r: pt(xr), z: zb}};
+}
+
+// Screen polyline of the crest cross-section (the solid value profile), for
+// keeping annotation typography clear of the curve.
+export function crestProfile(t: number): {x: number; y: number}[] {
+  const c = camAt(t);
+  const L = lift(t);
+  const o = [0, 0, 0];
+  const pts: {x: number; y: number}[] = [];
+  for (let x = -3.4; x <= 3.8; x += 0.05) {
+    if (project(c, x, L * terrain(x, PEAK.z) + 0.012, PEAK.z, o)) pts.push({x: o[0], y: o[1]});
+  }
+  return pts;
+}
+
+// +177.9% annotation box: right of the "residential sales value" label (never left of
+// ANN_MIN_X) and sitting above the curve with a clear gap, for every frame it is shown.
+const ANN_MIN_X = 720;
+export function annotationBox(t: number) {
+  if (t < 11.3 || t > 13.5) return null;
+  const an = anchors(t);
+  if (!an.crest) return null;
+  const left = Math.max(an.crest.x + 150, ANN_MIN_X);
+  const width = 270, height = 78, gap = 34;
+  const under = crestProfile(t).filter((p) => p.x >= left - 20 && p.x <= left + width + 20);
+  const curveTop = Math.min(an.crest.y, ...under.map((p) => p.y));
+  return {left, top: curveTop - gap - height, anchorX: left - 14, anchorY: curveTop - gap - height / 2, crest: an.crest};
 }

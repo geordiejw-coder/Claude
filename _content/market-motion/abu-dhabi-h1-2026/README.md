@@ -1,12 +1,12 @@
 # sp_ce — Abu Dhabi City Residential Market, H1 2026 · market-motion film
 
-A code-rendered, vertical market-motion film (1080 × 1920, 30 fps, 32.4 s, H.264, no audio), built in Remotion.
+A code-rendered, vertical market-motion film for Instagram Reels (1080 × 1920, 30 fps, 40.2 s, H.264, no audio), built in Remotion.
 Every mark on screen is drawn from code: no image generation, stock footage or AI imagery.
 
 | Output | Path |
 | --- | --- |
 | Final film | `out/abu-dhabi-h1-2026.mp4` |
-| Contact / key-frame sheet | `out/contact-sheet.jpg` (38 frames, timecoded) |
+| Contact / key-frame sheet | `out/contact-sheet.jpg` (35 frames, timecoded) |
 | Final branded frame | `out/final-frame.png` |
 | Locked data | `data/market.json` (the only source of on-screen numbers) |
 | Source | `src/world.ts` (camera, terrain, particles, contours, timeline anchors), `src/Field.tsx` (canvas renderer), `src/Film.tsx` (H1 typography), `src/PublisherScenes.tsx` (CBRE and Savills scenes), `src/Ending.tsx` + `src/brand.ts` (signature ending), `src/theme.tsx` (shared type primitives, legal line) |
@@ -50,6 +50,40 @@ compare them with the reference itself.
   roll.
 - **Deliberately not copied.** The reference's subject matter, artwork, branding, palette, typefaces and specific shots.
   The film also avoids real-estate clichés (buildings, keys, aerials, handshakes), hype language and CTAs.
+
+## Final production pass (Reels)
+
+- **Brand system.**
+  - **Palette:** pure black #000000 ground and white type, with Ice Blue #AABCFF and Soft Violet #E0ADF9 used only as
+    accents and in the "space" gradient.
+  - **Font:** Inter Variable is the only typeface (`public/fonts/InterVariable-latin.woff2`, the rsms Inter 4 build
+    from `@fontsource-variable/inter`). No Inter Variable file was supplied, so this official build stands in. No
+    fallback font is referenced anywhere, and the render fails if Inter doesn't load.
+  - **Weights:** hero metrics 700 (title 800), labels 600, sources and licence 400.
+  - **Header:** the official sp_ce SVG plus MARKET INTELLIGENCE on every data scene.
+- **Numbers.** Rolling digits and the count-up are gone. Every figure is revealed with an opacity-only fade, with no
+  motion or blur, so frames stay stable. 15,500 appears once the particle field has finished accumulating.
+- **Particle scenes.** `src/SceneParticles.tsx`, with geometry from `src/publisherLayout.ts`:
+  - **CBRE price momentum:** particles stream in and fill the Apartments (+24.4%) and Villas (+6.3%) bars on one
+    shared scale, with equal density, so the number of particles is proportional to the value.
+    - The +21.6% headline forms as a dotted particle marker on that scale, followed by one restrained light sweep.
+    - Everything then settles, moving by no more than a pixel.
+  - **Savills current pricing:** particles converge out of depth into two lattice fields whose lengths are
+    proportional to AED 17,200 and AED 12,100 / sqm. After that they hold, with only a slow glint.
+- **Sales-value annotation.** The +177.9% / SALES VALUE label is placed every frame from the projected curve. It
+  always sits right of "residential sales value", at x ≥ 720, and at least 34px above the curve.
+- **Three-number summary** (Cavendish only; source, period and scope shown): readable from about 20.4 s to 25.0 s.
+- **Caveat** beside the first 15,500: "Abu Dhabi City residential unit sales; excludes residential complexes,
+  duplexes and penthouses."
+- **Safe area.** Scene counters (y 1400), source lines and the licence line (bottom at y 1600) all sit inside
+  x 96–984, y 220–1600. Below y 1290 a black scrim dissolves the particle map, so no text sits on particles.
+- **End logo.** The letters only move and scale uniformly; no glyph is stretched, and the "a" compresses into the
+  underscore as briefed. On one frame, 38.0 s, the settled letters are replaced by the official SVG, unmodified and in
+  proportion (about 650 × 274 px). It sits on whole pixels with no transform, and there are no blended frames, so
+  nothing can ghost. The logo holds for 2.2 s with the licence line.
+
+Timeline: title 0–3.6 s · transactions 3–8.5 · sales value 8.5–13.3 · off-plan 13.3–18.4 · H1 summary 18.4–25.6 ·
+CBRE 25.7–30.5 · Savills 30.7–35.5 · ending 35.6–40.2.
 
 ## Revision 2 (after first-draft approval)
 

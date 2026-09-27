@@ -18,6 +18,7 @@ const LOCKED = {
   rateSource: 'Source: Savills Abu Dhabi Residential Market · Q2 2026',
   rateCaveat: 'Average transaction rates; project mix affects comparison.',
   legal: 'The Prop Co Real Estate Space LLC OPC · Broker Licence No. 202400892044',
+  firstClaimCaveat: 'Abu Dhabi City residential unit sales; excludes residential complexes, duplexes and penthouses.',
 };
 
 let ok = true;
@@ -45,17 +46,25 @@ check(cp.apartments.display === LOCKED.rateApartments && cp.apartments.value ===
 check(cp.villasTownhouses.display === LOCKED.rateVillasTownhouses && cp.villasTownhouses.value === 12100 && cp.villasTownhouses.label === 'Villas & Townhouses', 'Savills villas & townhouses = AED 12,100 / SQM');
 check(cp.source === LOCKED.rateSource && cp.caveat === LOCKED.rateCaveat, 'Savills source + caveat');
 check(d.legal === LOCKED.legal, 'legal line');
+check(d.firstClaimCaveat === LOCKED.firstClaimCaveat, '15,500 scope caveat text');
 // Display strings must agree with their numeric values (no re-rounding).
 check(Number(pm.residential.display.replace(/[+%]/g, '')) === pm.residential.value, 'CBRE display/value agree');
 check(Number(cp.apartments.display.replace(/[^\d]/g, '')) === cp.apartments.value && Number(cp.villasTownhouses.display.replace(/[^\d]/g, '')) === cp.villasTownhouses.value, 'Savills display/value agree');
 
 // ---- no hard-coded numeric claims in the typography source
-const film = ['src/Film.tsx', 'src/PublisherScenes.tsx', 'src/Ending.tsx'].map((f) => fs.readFileSync(f, 'utf8')).join('\n');
+const film = ['src/Film.tsx', 'src/PublisherScenes.tsx', 'src/Ending.tsx', 'src/theme.tsx'].map((f) => fs.readFileSync(f, 'utf8')).join('\n');
 const jsxText = [...film.matchAll(/>([^<>{}]+)</g)].map((x) => x[1].trim()).filter((s) => /\d/.test(s) && !/[;=(){}&|\n]/.test(s));
 const allowed = ['01 / 05', '02 / 05', '03 / 05', '04 / 05', '05 / 05', 'H1 2026'];
-// '0' is the visibility:hidden width sizer inside each rolling digit slot.
-const stray = jsxText.filter((s) => s !== '0' && !allowed.some((a) => s.includes(a)));
+const stray = jsxText.filter((s) => !allowed.some((a) => s.includes(a)));
 check(stray.length === 0, `no stray literal numbers in on-screen JSX text${stray.length ? ': ' + stray.join(' | ') : ''}`);
+
+// ---- brand system / render hygiene
+const src = fs.readdirSync('src').map((f) => fs.readFileSync(`src/${f}`, 'utf8')).join('\n');
+check(!/SlotString|landedCount\(t\)\.toLocaleString|count-up/i.test(src.replace(/\/\/.*$/gm, '')), 'no rolling digits or count-up in the typography');
+check(!/Arial|Helvetica|sans-serif|system-ui/.test(src), 'no fallback / substitute font families referenced');
+check(/export const FONT = 'Inter';/.test(src) && fs.existsSync('public/fonts/InterVariable-latin.woff2'), 'Inter Variable is the only registered family');
+check(!/#090D16|rgba\(9,13,22|rgba\(214,224,255|rgba\(28,40,78/.test(src), 'palette: no off-brand navy / tinted greys remain');
+check(fs.readFileSync('public/brand/sp_ce-logo.svg', 'utf8') === fs.readFileSync('../../../small.svg', 'utf8'), 'end logo is the supplied official SVG, byte-for-byte');
 
 // ---- render properties
 const file = 'out/abu-dhabi-h1-2026.mp4';
@@ -70,8 +79,8 @@ if (fs.existsSync(file)) {
   check(s.codec_name === 'h264', 'codec H.264');
   check(s.width === 1080 && s.height === 1920, '1080 × 1920');
   check(s.r_frame_rate === '30/1', '30 fps');
-  // Revision 2 extends the film for two extra evidence scenes + the signature ending.
-  check(Math.abs(dur - 32.4) < 0.05 && Number(s.nb_frames) === 972, `duration ${dur.toFixed(3)}s = 32.4s (972 frames)`);
+  // Final revision: 4.5 s summary, particle-built publisher scenes, 2 s logo hold.
+  check(Math.abs(dur - 40.2) < 0.05 && Number(s.nb_frames) === 1206, `duration ${dur.toFixed(3)}s = 40.2s (1206 frames)`);
   check(s.pix_fmt === 'yuv420p', 'yuv420p (phone/social compatible)');
   const audio = execFileSync('npx', ['remotion', 'ffprobe', '-v', 'error', '-select_streams', 'a', '-show_entries', 'stream=index', '-of', 'csv=p=0', file], {stdio: ['ignore', 'pipe', 'ignore']}).toString().trim();
   check(audio === '', 'no audio track (no narration)');

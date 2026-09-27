@@ -1,12 +1,12 @@
 import React, {useLayoutEffect, useRef} from 'react';
 import {useCurrentFrame} from 'remotion';
 import {
-  CONTOURS, FPS, H, LAST_LANDING, N, P, PEAK, PState, VALUE_MULT, W, anchors, bump, camAt, clamp01,
-  fieldPresence, inOutCubic, lift, outCubic, particleAt, project, seg, smooth, terrain,
+  CONTOURS, FPS, H, LAST_LANDING, annotationBox, N, P, PEAK, PState, VALUE_MULT, W, anchors, bump, camAt, clamp01,
+  fieldPresence, T, inOutCubic, lift, outCubic, particleAt, project, seg, smooth, terrain,
 } from './world';
 
 const ICE = [170, 188, 255];
-const PALE = [214, 224, 255];
+const PALE = [255, 255, 255];
 const VIOLET = [224, 173, 249];
 const mix = (a: number[], b: number[], k: number) => a.map((v, i) => Math.round(v + (b[i] - v) * k));
 const rgba = (c: number[], a: number) => `rgba(${c[0]},${c[1]},${c[2]},${a.toFixed(3)})`;
@@ -30,7 +30,7 @@ function drawField(ctx: CanvasRenderingContext2D, t: number) {
 
   // ------------------------------------------------------ grid (draped)
   const wake = outCubic(seg(t, 0.15, 2.8)) * 26; // radial reveal radius
-  const gridA = 0.075 * (1 - 0.35 * smooth(seg(t, 18, 20.5))) * (1 - 0.5 * smooth(seg(t, 28.2, 29.4)));
+  const gridA = 0.075 * (1 - 0.35 * smooth(seg(t, 18, 20.5))) * (1 - 0.5 * smooth(seg(t, T.endIn - 0.4, T.endIn + 0.8)));
   const gb: Path2D[] = Array.from({length: 6}, () => new Path2D());
   const lineTo = (x0: number, z0: number, x1: number, z1: number) => {
     const r = Math.hypot((x0 + x1) / 2, (z0 + z1) / 2 - 5);
@@ -52,7 +52,7 @@ function drawField(ctx: CanvasRenderingContext2D, t: number) {
   // ------------------------------------------------------ contours (lifted)
   const cb: Path2D[] = Array.from({length: 6}, () => new Path2D());
   const cs = CONTOURS;
-  const contourA = 0.2 * (1 - 0.45 * smooth(seg(t, 13.5, 16))) * (1 - 0.4 * smooth(seg(t, 18.5, 21))) * (1 - 0.6 * smooth(seg(t, 28.2, 29.4)));
+  const contourA = 0.2 * (1 - 0.45 * smooth(seg(t, 13.5, 16))) * (1 - 0.4 * smooth(seg(t, 18.5, 21))) * (1 - 0.6 * smooth(seg(t, T.endIn - 0.4, T.endIn + 0.8)));
   for (let k = 0; k < cs.length; k += 5) {
     const lv = cs[k + 4];
     const rev = smooth(seg(t, 0.5 + lv * 2.2, 1.6 + lv * 2.2));
@@ -170,10 +170,12 @@ function drawField(ctx: CanvasRenderingContext2D, t: number) {
       ctx.stroke();
       // leader to the label
       const lk = outCubic(seg(t, 11.5, 12.1));
-      if (lk > 0) {
+      const box = annotationBox(t);
+      if (lk > 0 && box) {
+        const x0 = x + 10, y0 = an.crest.y - 10;
         ctx.beginPath();
-        ctx.moveTo(x + 14, an.crest.y);
-        ctx.lineTo(x + 14 + 90 * lk, an.crest.y + 90 * lk);
+        ctx.moveTo(x0, y0);
+        ctx.lineTo(x0 + (box.anchorX - x0) * lk, y0 + (box.anchorY - y0) * lk);
         ctx.stroke();
       }
     }
