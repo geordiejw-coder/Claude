@@ -55,11 +55,15 @@ compare them with the reference itself.
 
 - **Scope caveat removed.** The line under 15,500 ("Abu Dhabi City residential unit sales; excludes residential
   complexes, duplexes and penthouses.") has been removed. The city scope note stays in the H1 summary footer.
-- **End card: tagline only.** The final card shows the sp_ce tagline exactly as the brand spec sets it, followed by
-  the licence line, with no logo.
-  - **Wording:** "Find your space.", in sentence case with the full stop, on two lines. "Find your" and the full stop
-    are solid white; only "space" carries the Unicorn gradient (`gradient.unicorn`, 135°).
-  - **Type:** Inter 600, line-height 1.02, -0.025em, 88 px (`type.tagline-scale.reel-end-card`).
+- **End card: tagline only.** The final card shows the tagline "Find your space.", in sentence case with the full
+  stop, on two lines, with no logo.
+  - **Colour:** "Find your" and the full stop are solid white; only "space" carries the Unicorn gradient
+    (`gradient.unicorn`, 135°).
+  - **Type:** Inter 600, line-height 1.02, -0.025em, with both lines at one consistent size.
+  - **Size exception:** the size is 160 px, a client-approved exception to `tagline-scale.reel-end-card` (88 px),
+    which read too small. The two lines are left-aligned as one block and centred in the frame.
+  - **Licence line:** it sits quietly at the foot of the safe area (bottom at y 1600), because it's there to meet the
+    legal requirement, not to be part of the advert.
   - **Hold:** 2.5 s once complete.
 
 ## sp_ce design-system pack: status for this job
