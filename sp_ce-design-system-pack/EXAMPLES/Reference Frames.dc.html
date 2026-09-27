@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="../../_ds/sp-ce-design-system-e2dc936f-2579-4a01-b55f-8d161ea0bb60/colors_and_type.css">
+<script src="../../_ds/sp-ce-design-system-e2dc936f-2579-4a01-b55f-8d161ea0bb60/_ds_bundle.js"></script>
+<style>
+@font-face { font-family: "Inter"; src: url("../ASSETS/fonts/Inter-VariableFont_slnt_wght.ttf") format("truetype"); font-weight: 100 900; }
+@font-face { font-family: "JetBrains Mono"; src: url("../ASSETS/fonts/JetBrainsMono-VariableFont_wght.ttf") format("truetype"); font-weight: 100 800; }
+body { margin: 0; background: #E4E8EF; }
+a { color: #3D4E8F; } a:hover { color: #1F2D5C; }
+</style>
+</helmet>
+<section style="background: #E4E8EF; min-height: 100vh; padding: 64px; display: flex; flex-direction: column; gap: 48px; font-family: 'Inter', sans-serif; color: #1A2030; -webkit-font-smoothing: antialiased;">
+  <div style="display: flex; flex-direction: column; gap: 8px;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4A5468;">sp_ce Design System Pack · EXAMPLES</div>
+    <div style="font-weight: 600; font-size: 44px; line-height: 1.1; letter-spacing: -0.02em;">Reference frames</div>
+    <div style="font-size: 16px; line-height: 1.55; color: #4A5468; max-width: 720px;">Clean artwork left, safe-zone guide centre, notes right. Guides and notes never go on exported artwork. Bracketed text and 00.0 figures are slots for approved copy.</div>
+  </div>
+
+  <div id="1a" style="display: flex; gap: 32px; align-items: flex-start;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4A5468;">1a · artwork · 1080×1350</div>
+      <div style="width: 540px; height: 675px; overflow: hidden;"><div style="width: 1080px; height: 1350px; transform: scale(0.5); transform-origin: 0 0;"><dc-import name="Frame-Dark-Statistic" hint-size="1080px,1350px"></dc-import></div></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4A5468;">guide overlay</div>
+      <div style="width: 540px; height: 675px; overflow: hidden;"><div style="width: 1080px; height: 1350px; transform: scale(0.5); transform-origin: 0 0;"><dc-import name="Frame-Dark-Statistic" guides="{{ true }}" hint-size="1080px,1350px"></dc-import></div></div>
+    </div>
+    <div style="width: 420px; display: flex; flex-direction: column; gap: 16px; font-size: 14px; line-height: 1.5; color: #4A5468; padding-top: 24px;">
+      <div style="font-weight: 600; font-size: 22px; line-height: 1.25; color: #1A2030;">Dark market-intelligence statistic</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Hierarchy.</strong> Section label → statistic → label → one supporting line → source and period. One statistic only. Opening frame of a set, so no licence footer.</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Composition.</strong> Particle field in the upper half fades out by y 720; text anchored bottom-left on the 72px edge. Wordmark top-left, scene counter top-right.</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Tokens.</strong> Ground sp-charcoal-blue. Particles heat-5 → heat-0 (decorative). Label sp-ice-blue. Statistic sp-white. Label sp-cloud. Support and metadata sp-mist. Unicorn rule 96×8.</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Type.</strong> Statistic Inter 600 220px tabular. Label Inter 500 36px. Section label Inter 500 24px +0.12em. Body Inter 400 32px. Source and counter JetBrains Mono 22px; licence footer Inter 400 22px.</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Motion.</strong> Particles drift 4–12px/s. Statistic appears whole, 600ms, 16px rise. No counting.</div>
+    </div>
+  </div>
+
+  <div id="1b" style="display: flex; gap: 32px; align-items: flex-start;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4A5468;">1b · artwork · 1080×1350</div>
+      <div style="width: 540px; height: 675px; overflow: hidden;"><div style="width: 1080px; height: 1350px; transform: scale(0.5); transform-origin: 0 0;"><dc-import name="Frame-Light-Editorial" hint-size="1080px,1350px"></dc-import></div></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4A5468;">guide overlay</div>
+      <div style="width: 540px; height: 675px; overflow: hidden;"><div style="width: 1080px; height: 1350px; transform: scale(0.5); transform-origin: 0 0;"><dc-import name="Frame-Light-Editorial" guides="{{ true }}" hint-size="1080px,1350px"></dc-import></div></div>
+    </div>
+    <div style="width: 420px; display: flex; flex-direction: column; gap: 16px; font-size: 14px; line-height: 1.5; color: #4A5468; padding-top: 24px;">
+      <div style="font-weight: 600; font-size: 22px; line-height: 1.25; color: #1A2030;">Light editorial / insight</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Hierarchy.</strong> Image → section label → headline → body → source. Headline max three lines; body max two sentences.</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Composition.</strong> Full-bleed real photo 1080×560, square corners. Text on sp-paper below. Source bottom-left, wordmark bottom-right.</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Tokens.</strong> Ground sp-paper. Label sp-deep-indigo #3D4E8F. Headline sp-ink. Body and metadata sp-slate (Mist fails contrast on light). Unicorn rule 96×8.</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Type.</strong> Headline Inter 600 72px -0.02em. Body Inter 400 32px/1.4. Metadata JetBrains Mono 22px.</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Logo.</strong> logo-mark-small.svg (black) on light, 176px visible width.</div>
+    </div>
+  </div>
+
+  <div id="1c" style="display: flex; gap: 32px; align-items: flex-start;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4A5468;">1c · artwork · 1080×1920</div>
+      <div style="width: 540px; height: 960px; overflow: hidden;"><div style="width: 1080px; height: 1920px; transform: scale(0.5); transform-origin: 0 0;"><dc-import name="Frame-Reel-End-Card" hint-size="1080px,1920px"></dc-import></div></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4A5468;">guide overlay</div>
+      <div style="width: 540px; height: 960px; overflow: hidden;"><div style="width: 1080px; height: 1920px; transform: scale(0.5); transform-origin: 0 0;"><dc-import name="Frame-Reel-End-Card" guides="{{ true }}" hint-size="1080px,1920px"></dc-import></div></div>
+    </div>
+    <div style="width: 420px; display: flex; flex-direction: column; gap: 16px; font-size: 14px; line-height: 1.5; color: #4A5468; padding-top: 24px;">
+      <div style="font-weight: 600; font-size: 22px; line-height: 1.25; color: #1A2030;">Reel end-card / logo</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Hierarchy.</strong> Wordmark → tagline (the key line, largest text) → licence. No web address on social.</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Safe zones.</strong> Top 220px, bottom 420px and right 160px stay empty. Content-safe box x 72–920, y 220–1500. Content centred on x 540, inside the box.</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Tokens.</strong> Ground sp-black. logo-mark-small.png (white) at 320px; Reels keep the plain wordmark. Tagline sp-white with only "space" in the unicorn gradient. Licence footer sp-mist, final card only.</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Type.</strong> Tagline Inter 600 88px/1.02 -0.025em. Licence Inter 400 22px, two centred lines.</div>
+      <div><strong style="color: #1A2030; font-weight: 600;">Motion.</strong> Wordmark fades in 800ms (emphasis easing), tagline 480ms after 240ms, licence 360ms. Hold 2.5s. No glow, sweep or flare.</div>
+    </div>
+  </div>
+</section>
+</x-dc>
+</body>
+</html>

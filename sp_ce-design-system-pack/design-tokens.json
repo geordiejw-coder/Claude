@@ -1,0 +1,268 @@
+{
+  "$meta": {
+    "name": "sp_ce Design System Pack",
+    "version": "1.0.0",
+    "date": "2026-09-27",
+    "units": "px on a 1080px-wide social canvas unless stated",
+    "rule": "Use only these values. Do not add, round or substitute. If a value is missing, stop and ask.",
+    "source": "Matches the sp_ce design system (colors_and_type.css) and the sp_ce Design Brief for Agents."
+  },
+
+  "color": {
+    "primary": {
+      "sp-black": "#000000",
+      "sp-charcoal-blue": "#1C1F2A",
+      "sp-ink": "#1A2030",
+      "sp-slate": "#4A5468",
+      "sp-mist": "#8B95A7",
+      "sp-cloud": "#E4E8EF",
+      "sp-paper": "#F7F8FA",
+      "sp-white": "#FFFFFF"
+    },
+    "accent": {
+      "sp-ice-blue": "#AABCFF",
+      "brand-accent": "#AABCFF",
+      "soft-violet": "#E0ADF9",
+      "brand-accent-2": "#E0ADF9",
+      "sp-periwinkle": "#7081B8",
+      "sp-midnight-blue": "#1F2D5C",
+      "sp-deep-indigo": "#3D4E8F",
+      "sp-plum": "#6B4A7A"
+    },
+    "tint": { "sp-sky-wash": "#D6E0FF", "sp-lilac-mist": "#F0DCFB" },
+    "mode": {
+      "$rule": "One lead mode per piece. The other mode supplies only small supporting accents.",
+      "light": { "use": "Marketing, social, brand moments", "grounds": ["#FFFFFF", "#F7F8FA", "#1C1F2A", "#000000"], "accents": ["#AABCFF", "#E0ADF9"], "tints": ["#D6E0FF", "#F0DCFB"], "gradient": true },
+      "serious": { "use": "Reports, advisory work, dashboards, valuations, LinkedIn opinion posts", "accents": ["#1F2D5C", "#3D4E8F", "#6B4A7A", "#7081B8"], "gradient": false }
+    },
+    "status": {
+      "$note": "Status meaning only. Terracotta is a one-off editorial accent.",
+      "positive": "#3D7A5C", "attention": "#B8893A", "negative": "#9E4848", "info": "#3D6B7E", "terracotta": "#C28560"
+    },
+    "heat": {
+      "heat-0": "#EEF2FF",
+      "heat-1": "#C7D2FF",
+      "heat-2": "#AABCFF",
+      "heat-3": "#7A92E8",
+      "heat-4": "#4A5FB8",
+      "heat-5": "#2A3878"
+    },
+    "semantic": {
+      "surface-dark": "#1C1F2A",
+      "surface-dark-deep": "#000000",
+      "surface-dark-panel": "#1A2030",
+      "surface-light": "#FFFFFF",
+      "surface-light-page": "#F7F8FA",
+      "text-on-dark-1": "#FFFFFF",
+      "text-on-dark-2": "#E4E8EF",
+      "text-on-dark-3": "#8B95A7",
+      "text-on-light-1": "#1A2030",
+      "text-on-light-2": "#4A5468",
+      "text-on-light-3-large-only": "#8B95A7",
+      "accent-on-dark": "#AABCFF",
+      "accent-on-light": "#3D4E8F",
+      "photo-placeholder": "#D9D9D9"
+    }
+  },
+
+  "gradient": {
+    "unicorn": {
+      "value": "linear-gradient(135deg, #AABCFF 0%, #E0ADF9 100%)",
+      "use": "The word 'space' in the tagline, rule lines 4-15px, the map pin, active states, one small accent per frame.",
+      "never": "Full-bleed backgrounds, body text, statistics, chart fills, buttons across a UI, anything in serious mode."
+    },
+    "image-overlay": {
+      "value": "linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,0.55) 100%)",
+      "use": "Full-bleed photo with headline on the lower third only."
+    },
+    "heat-ramp": {
+      "value": "linear-gradient(90deg, #EEF2FF 0%, #C7D2FF 20%, #AABCFF 40%, #7A92E8 60%, #4A5FB8 80%, #2A3878 100%)",
+      "use": "Data legends and scale keys only. Never decorative."
+    }
+  },
+
+  "stroke": {
+    "hairline-light": "1px solid #E4E8EF",
+    "hairline-light-strong": "1px solid #D2D7E0",
+    "hairline-dark": "1px solid rgba(255,255,255,0.14)",
+    "chart-axis-dark": "1px solid rgba(255,255,255,0.14)",
+    "chart-axis-light": "1px solid #E4E8EF",
+    "chart-series-primary-dark": "#AABCFF",
+    "chart-series-primary-light": "#3D4E8F",
+    "chart-series-secondary": "#7081B8",
+    "chart-series-muted-dark": "#4A5468",
+    "chart-series-muted-light": "#8B95A7",
+    "chart-line-width": "3px",
+    "unicorn-rule-height": "8px",
+    "unicorn-rule-width": "96px",
+    "social-copy-dividers": "none"
+  },
+
+  "type": {
+    "family": {
+      "sans": "\"Inter\", ui-sans-serif, system-ui, sans-serif",
+      "display": "\"Inter\", ui-sans-serif, system-ui, sans-serif",
+      "mono": "\"JetBrains Mono\", ui-monospace, Menlo, monospace"
+    },
+    "files": {
+      "Inter": "ASSETS/fonts/Inter-VariableFont_slnt_wght.ttf",
+      "JetBrains Mono": "ASSETS/fonts/JetBrainsMono-VariableFont_wght.ttf",
+      "JetBrains Mono Italic": "ASSETS/fonts/JetBrainsMono-Italic-VariableFont_wght.ttf"
+    },
+    "weight": { "regular": 400, "medium": 500, "semibold": 600, "max": 600 },
+    "mono-scope": ["source line", "period", "scene counter", "data labels", "code"],
+    "licence-footer-font": "Inter, same as body text. Never mono.",
+    "fallback": "CSS stacks fall back to system sans, but exported artwork must render in Inter. Check before export.",
+    "features": {
+      "inter": "\"ss01\" 1, \"cv11\" 1",
+      "figures": "tabular-nums on statistics, tables and counters"
+    },
+    "min-size": {
+      "social-body": 28,
+      "social-metadata": 22,
+      "note": "At 1080px canvas on a 390pt phone, 22px renders about 8pt. Never smaller."
+    },
+    "social-scale": {
+      "hero-headline":   { "family": "display", "weight": 600, "size": 72,  "line-height": 1.05, "letter-spacing": "-0.02em", "case": "sentence", "max-lines": 3 },
+      "hero-headline-reel": { "family": "display", "weight": 600, "size": 88, "line-height": 1.05, "letter-spacing": "-0.02em", "case": "sentence", "max-lines": 3 },
+      "statistic-figure": { "family": "display", "weight": 600, "size": 220, "line-height": 0.95, "letter-spacing": "-0.02em", "numeric": "tabular-nums", "max-per-frame": 1 },
+      "statistic-label": { "family": "sans", "weight": 500, "size": 36,  "line-height": 1.3,  "letter-spacing": "-0.01em", "max-lines": 2 },
+      "section-label":   { "family": "sans", "weight": 500, "size": 24,  "line-height": 1.2,  "letter-spacing": "0.12em", "case": "uppercase" },
+      "body":            { "family": "sans", "weight": 400, "size": 32,  "line-height": 1.4,  "letter-spacing": "0", "max-sentences": 2 },
+      "source-line":     { "family": "mono", "weight": 400, "size": 22,  "line-height": 1.45, "letter-spacing": "0" },
+      "licence-footer":  { "family": "sans", "weight": 400, "size": 22,  "line-height": 1.45, "letter-spacing": "0" },
+      "scene-counter":   { "family": "mono", "weight": 500, "size": 22,  "line-height": 1,    "letter-spacing": "0.04em", "format": "01 / 05" },
+      "tagline":         { "family": "display", "weight": 600, "size": 64, "line-height": 1.02, "letter-spacing": "-0.025em", "text": "Find your space.", "gradient-word": "space", "rest": "'Find your' and the full stop solid: #1A2030 on light, #FFFFFF on dark" }
+    },
+    "tagline-scale": {
+      "$note": "Key line. Size by surface; always 600, line-height 1.02, -0.025em. On closing frames it is the largest text.",
+      "reel-end-card": 88,
+      "carousel-last-frame": 72,
+      "square-last-frame": 64,
+      "deck-1920-closing": 96,
+      "report-a4-cover-or-closing": 52,
+      "min-social": 48
+    },
+    "ui-scale": {
+      "$note": "From live colors_and_type.css, for 1280px+ web and report surfaces.",
+      "display": "600 64px/1.05",
+      "h1": "600 44px/1.1",
+      "h2": "600 32px/1.15",
+      "h3": "600 22px/1.25",
+      "h4": "600 18px/1.3",
+      "eyebrow": "500 12px/1.2 +0.12em uppercase",
+      "lead": "400 20px/1.45",
+      "body": "400 16px/1.55",
+      "body-sm": "400 14px/1.5",
+      "caption": "400 12px/1.4",
+      "mono": "400 13px/1.5"
+    }
+  },
+
+  "space": {
+    "scale": [4, 8, 12, 16, 24, 32, 48, 64, 96],
+    "social": {
+      "frame-margin": 72,
+      "stack-tight": 16,
+      "stack": 32,
+      "stack-loose": 64,
+      "block-gap": 96
+    }
+  },
+
+  "radius": {
+    "none": 0,
+    "xs": 2,
+    "sm": 4,
+    "md": 8,
+    "lg": 12,
+    "round-avatars-dots-only": 999,
+    "photography": 0,
+    "social-frames": 0
+  },
+
+  "shadow": {
+    "$note": "UI and report surfaces only. Social frames use no shadows and no glows.",
+    "shadow-1": "0 1px 2px rgba(26,32,48,0.06), 0 1px 1px rgba(26,32,48,0.04)",
+    "shadow-2": "0 6px 18px rgba(26,32,48,0.10), 0 1px 2px rgba(26,32,48,0.05)",
+    "shadow-3": "0 20px 48px rgba(26,32,48,0.16), 0 3px 8px rgba(26,32,48,0.08)",
+    "focus": "0 0 0 3px rgba(170,188,255,0.45)",
+    "social": "none"
+  },
+
+  "legal": {
+    "licence-footer": "The Prop Co Real Estate Space LLC OPC · Broker Licence No. 202400892044",
+    "placement": "Once per document or advert, on the final card or page. Not on every page.",
+    "style": "type.social-scale.licence-footer",
+    "locked": true
+  },
+
+  "logo": {
+    "wordmark-default": "ASSETS/logos/logo-mark-small",
+    "descriptor-lockup": "ASSETS/logos/logo-real-estate",
+    "on-light": ".svg (black)",
+    "on-dark": ".png (white)",
+    "clear-space": "1x the height of the lowercase 's' on all sides (about 0.2x the visible wordmark width)",
+    "min-width-digital-px": { "wordmark": 96, "descriptor-lockup": 200 },
+    "min-width-print-mm": { "wordmark": 18, "descriptor-lockup": 35 },
+    "file-padding": "Official files include built-in padding (visible artwork ~86% of file width). Size by visible artwork.",
+    "social-size": { "frame-wordmark-width": 176, "reel-end-card-wordmark-width": 320, "carousel-first-last-lockup-width": 400 },
+    "placement": {
+      "carousel": "Descriptor lockup on the first and last frames; plain wordmark on the frames between.",
+      "reel": "Plain wordmark throughout, including the end-card.",
+      "reports-and-documents": "Descriptor lockup on cover and closing/contact page; plain wordmark in page chrome."
+    },
+    "web-address": { "value": "spacerealestate.me", "use": "Written reports and documents only. Not on social or Reels." }
+  },
+
+  "safe-area": {
+    "reel-9x16": {
+      "canvas": { "width": 1080, "height": 1920 },
+      "ui-exclusion": {
+        "top": { "x": 0, "y": 0, "width": 1080, "height": 220 },
+        "bottom": { "x": 0, "y": 1500, "width": 1080, "height": 420 },
+        "right-rail": { "x": 920, "y": 220, "width": 160, "height": 1280 }
+      },
+      "content-safe": { "x": 72, "y": 220, "width": 848, "height": 1280 },
+      "centre-x-for-logos": 540
+    },
+    "feed-4x5": {
+      "canvas": { "width": 1080, "height": 1350 },
+      "content-safe": { "x": 72, "y": 72, "width": 936, "height": 1206 },
+      "grid-crop-3x4": { "x": 34, "y": 0, "width": 1012, "height": 1350 }
+    },
+    "square-1x1": {
+      "canvas": { "width": 1080, "height": 1080 },
+      "content-safe": { "x": 72, "y": 72, "width": 936, "height": 936 }
+    }
+  },
+
+  "motion": {
+    "easing": {
+      "standard": "cubic-bezier(0.2, 0.6, 0.2, 1)",
+      "emphasis": "cubic-bezier(0.16, 1, 0.3, 1)",
+      "linear-drift": "linear"
+    },
+    "duration-ui-ms": { "fast": 120, "base": 200, "slow": 360 },
+    "duration-video-ms": {
+      "text-in": 480,
+      "statistic-in": 600,
+      "logo-in": 800,
+      "scene-cut-crossfade": 360,
+      "stagger": 120,
+      "min-hold-per-statistic": 2500,
+      "end-card-hold": 2500
+    },
+    "distance-px": { "text-rise": 24, "statistic-rise": 16, "max-translate": 32 },
+    "frame-rate": 30,
+    "particle": {
+      "palette": "heat-0..heat-5",
+      "drift-speed-px-per-s": [4, 12],
+      "max-opacity": 0.85,
+      "behaviour": "Slow, even drift and density change that resolve into form. No bursts, trails or explosions."
+    },
+    "number-reveal": "Final value appears whole: opacity 0 to 1 with a 16px rise. No counting, rolling, odometer, blur or ghosting.",
+    "allowed": ["opacity fade", "small translate", "masked line reveal", "particle drift", "crossfade"],
+    "prohibited": ["bounce", "spring overshoot", "elastic", "glow", "lens flare", "liquid metal", "chrome", "light sweeps", "glitch", "camera shake", "parallax", "3D flips", "rolling numbers", "motion blur trails"]
+  }
+}

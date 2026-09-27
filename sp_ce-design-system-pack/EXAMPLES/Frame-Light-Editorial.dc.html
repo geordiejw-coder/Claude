@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="../../_ds/sp-ce-design-system-e2dc936f-2579-4a01-b55f-8d161ea0bb60/colors_and_type.css">
+<script src="../../_ds/sp-ce-design-system-e2dc936f-2579-4a01-b55f-8d161ea0bb60/_ds_bundle.js"></script>
+<style>
+@font-face { font-family: "Inter"; src: url("../ASSETS/fonts/Inter-VariableFont_slnt_wght.ttf") format("truetype"); font-weight: 100 900; }
+@font-face { font-family: "JetBrains Mono"; src: url("../ASSETS/fonts/JetBrainsMono-VariableFont_wght.ttf") format("truetype"); font-weight: 100 800; }
+body { margin: 0; }
+a { color: #3D4E8F; } a:hover { color: #1F2D5C; }
+</style>
+</helmet>
+<div data-screen-label="Light editorial frame" style="position: relative; width: 1080px; height: 1350px; overflow: hidden; background: #F7F8FA; font-family: 'Inter', sans-serif; font-feature-settings: 'ss01' 1, 'cv11' 1; -webkit-font-smoothing: antialiased;">
+  <div style="position: absolute; left: 0; top: 0; width: 1080px; height: 560px; background: #D9D9D9; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 24px; color: #4A5468;">Placeholder image</div>
+  <div style="position: absolute; left: 72px; right: 72px; top: 624px; display: flex; flex-direction: column;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 24px;">
+      <div style="font-weight: 500; font-size: 24px; line-height: 1.2; letter-spacing: 0.12em; text-transform: uppercase; color: #3D4E8F;">[Section label]</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 22px; line-height: 1; letter-spacing: 0.04em; color: #4A5468; font-variant-numeric: tabular-nums;">02 / 04</div>
+    </div>
+    <div style="width: 96px; height: 8px; margin: 24px 0 40px; background: linear-gradient(135deg, #AABCFF 0%, #E0ADF9 100%);"></div>
+    <div style="max-width: 900px; font-weight: 600; font-size: 72px; line-height: 1.05; letter-spacing: -0.02em; color: #1A2030; text-wrap: pretty;">[Approved headline, sentence case, no more than three lines]</div>
+    <div style="margin-top: 32px; max-width: 860px; font-weight: 400; font-size: 32px; line-height: 1.4; color: #4A5468; text-wrap: pretty;">[Approved body. One or two short sentences at most.]</div>
+  </div>
+  <div style="position: absolute; left: 72px; right: 72px; bottom: 72px; display: flex; justify-content: space-between; align-items: flex-end; gap: 32px;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 22px; line-height: 1.45; color: #4A5468;">Source: [Approved source] · Period: [Start–End]</div>
+    <img src="../ASSETS/logos/logo-mark-small.svg" alt="sp_ce" style="width: 204px; height: auto; display: block; margin: 0 -14px -24px 0;">
+  </div>
+  <sc-if value="{{ guides }}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; pointer-events: none; font-family: 'JetBrains Mono', monospace; font-size: 18px; color: #FFFFFF;">
+      <div style="position: absolute; left: 72px; top: 72px; right: 72px; bottom: 72px; border: 2px dashed #3D4E8F;"></div>
+      <div style="position: absolute; left: 34px; top: 0; bottom: 0; border-left: 1px solid rgba(61,78,143,0.5);"></div>
+      <div style="position: absolute; left: 1046px; top: 0; bottom: 0; border-left: 1px solid rgba(61,78,143,0.5);"></div>
+      <div style="position: absolute; left: 80px; top: 80px; padding: 4px 8px; background: #3D4E8F;">content-safe 72px inset · photo may bleed</div>
+      <div style="position: absolute; left: 0; right: 0; top: 560px; border-top: 1px dashed #3D4E8F;"></div>
+      <div style="position: absolute; right: 80px; top: 530px; padding: 4px 8px; background: #3D4E8F;">image 1080×560, square corners</div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1080,&quot;height&quot;:1350},&quot;guides&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() { return { guides: !!this.props.guides }; }
+}
+</script>
+</body>
+</html>
