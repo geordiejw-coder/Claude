@@ -1,5 +1,5 @@
 {
-  "_note": "LOCKED FACTS. Every number shown on screen is read from this file. Do not edit without re-checking the source.",
+  "_note": "LOCKED FACTS. Every number shown on screen is read from this file. Do not edit without re-checking the source. Each publisher's figures stay in their own scene; they are never merged or compared across series.",
   "market": "Abu Dhabi City",
   "segment": "Residential",
   "period": "H1 2026",
@@ -8,14 +8,20 @@
       "value": 15500,
       "display": "15,500",
       "label": "residential transactions",
-      "yoy": { "value": 103.6, "display": "+103.6% y/y" },
+      "yoy": {
+        "value": 103.6,
+        "display": "+103.6% y/y"
+      },
       "sourcePage": 2
     },
     "salesValue": {
       "valueAedBn": 67.8,
       "display": "AED 67.8bn",
       "label": "sales value",
-      "yoy": { "value": 177.9, "display": "+177.9% y/y" },
+      "yoy": {
+        "value": 177.9,
+        "display": "+177.9% y/y"
+      },
       "sourcePage": 4
     },
     "offPlanShare": {
@@ -23,17 +29,69 @@
       "display": "82.7%",
       "label": "off-plan",
       "basis": "share of sales volume",
-      "remainder": { "value": 17.3, "display": "17.3%", "derivation": "100 - 82.7" },
+      "remainder": {
+        "value": 17.3,
+        "display": "17.3%",
+        "derivation": "100 - 82.7"
+      },
       "sourcePage": 5
     }
   },
-  "summaryLine": ["15,500 sales", "AED 67.8bn", "82.7% off-plan"],
+  "summaryLine": [
+    "15,500 sales",
+    "AED 67.8bn",
+    "82.7% off-plan"
+  ],
   "scopeNote": "City series excludes residential complexes, duplexes and penthouses.",
   "source": {
     "publisher": "Cavendish Maxwell",
     "title": "Abu Dhabi Residential Market Performance — H1 2026",
     "pages": "pp. 2, 4 and 5",
-    "short": "Source: Cavendish Maxwell, Abu Dhabi Residential Market Performance — H1 2026",
-    "full": "Source: Cavendish Maxwell, Abu Dhabi Residential Market Performance — H1 2026, pp. 2, 4 and 5."
+    "short": "Source: Cavendish Maxwell, Abu Dhabi City residential series · H1 2026",
+    "full": "Source: Cavendish Maxwell, Abu Dhabi City residential series · H1 2026",
+    "document": "Cavendish Maxwell, Abu Dhabi Residential Market Performance — H1 2026, pp. 2, 4 and 5"
+  },
+  "displayMarket": "Abu Dhabi",
+  "priceMomentum": {
+    "headline": "Residential prices",
+    "residential": {
+      "value": 21.6,
+      "display": "+21.6%",
+      "suffix": "Y/Y"
+    },
+    "apartments": {
+      "label": "Apartments",
+      "value": 24.4,
+      "display": "+24.4%"
+    },
+    "villas": {
+      "label": "Villas",
+      "value": 6.3,
+      "display": "+6.3%"
+    },
+    "source": "Source: CBRE UAE Real Estate Market Review · Q2 2026"
+  },
+  "currentPricing": {
+    "headline": "Current pricing",
+    "apartments": {
+      "label": "Apartments",
+      "value": 17200,
+      "display": "AED 17,200",
+      "unit": "/ SQM"
+    },
+    "villasTownhouses": {
+      "label": "Villas & Townhouses",
+      "value": 12100,
+      "display": "AED 12,100",
+      "unit": "/ SQM"
+    },
+    "source": "Source: Savills Abu Dhabi Residential Market · Q2 2026",
+    "caveat": "Average transaction rates; project mix affects comparison."
+  },
+  "legal": "The Prop Co Real Estate Space LLC OPC · Broker Licence No. 202400892044",
+  "ending": {
+    "line1": "find your",
+    "line2": "space",
+    "logo": "brand/sp_ce-logo.svg"
   }
 }

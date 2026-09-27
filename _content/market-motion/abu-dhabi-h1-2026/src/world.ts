@@ -7,8 +7,8 @@ import data from '../data/market.json';
 export const W = 1080;
 export const H = 1920;
 export const FPS = 30;
-export const DURATION_S = 22;
-export const DURATION = FPS * DURATION_S;
+export const DURATION_S = 32.4;
+export const DURATION = Math.round(FPS * DURATION_S);
 
 // One light point per recorded transaction.
 export const N = data.metrics.transactions.value; // 15,500
@@ -53,6 +53,10 @@ const CAM_KEYS: number[][] = [
   [18, -0.1, 6.2, -4.0, 33, -1.5, 0.4, 0.62],
   [22, 0.0, 5.0, -12.0, 14, 0.5, 0, 0.66],
   [24, 0.0, 4.8, -13.6, 13, 1.0, 0, 0.66],
+  // extension: slow lateral drift under the publisher scenes and the ending
+  [28, 0.7, 4.3, -15.2, 11, 4.0, 0, 0.64],
+  [32.4, 1.2, 3.9, -16.8, 9, 6.5, 0, 0.62],
+  [35, 1.4, 3.7, -17.6, 8, 7.5, 0, 0.62],
 ];
 
 export type Cam = {
@@ -137,6 +141,20 @@ export function meander(z: number, t: number) {
   return 0.55 * Math.sin(0.3 * z + 0.8) + 0.22 * Math.sin(0.68 * z - t * 0.35);
 }
 export const SPLIT_GAP = 0.55;
+
+// Timeline anchors for the revision (seconds).
+export const T = {
+  recapOut: 20.95, // H1 recap leaves
+  priceIn: 21.5, priceOut: 24.75, // CBRE price momentum
+  rateIn: 24.9, rateOut: 28.35, // Savills current pricing
+  endIn: 28.45, // signature ending
+};
+
+// The Cavendish particle field recedes when other publishers' figures are on
+// screen, so no scene reads as one merged series.
+export function fieldPresence(t: number) {
+  return 1 - 0.72 * smooth(seg(t, 20.9, 22.0)) - 0.2 * smooth(seg(t, 28.2, 29.4));
+}
 
 // -------------------------------------------------------------- particles
 export const P = (() => {

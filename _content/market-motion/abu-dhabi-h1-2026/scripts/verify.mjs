@@ -11,7 +11,13 @@ const LOCKED = {
   offPlan: '82.7%',
   offPlanRemainder: '17.3%', // derived: 100 − 82.7, shown only as the quiet remainder label
   scope: 'City series excludes residential complexes, duplexes and penthouses.',
-  source: 'Source: Cavendish Maxwell, Abu Dhabi Residential Market Performance — H1 2026, pp. 2, 4 and 5.',
+  source: 'Source: Cavendish Maxwell, Abu Dhabi City residential series · H1 2026',
+  priceHeadline: '+21.6%', priceApartments: '+24.4%', priceVillas: '+6.3%',
+  priceSource: 'Source: CBRE UAE Real Estate Market Review · Q2 2026',
+  rateApartments: 'AED 17,200', rateVillasTownhouses: 'AED 12,100', rateUnit: '/ SQM',
+  rateSource: 'Source: Savills Abu Dhabi Residential Market · Q2 2026',
+  rateCaveat: 'Average transaction rates; project mix affects comparison.',
+  legal: 'The Prop Co Real Estate Space LLC OPC · Broker Licence No. 202400892044',
 };
 
 let ok = true;
@@ -30,11 +36,23 @@ check(d.market === 'Abu Dhabi City' && d.period === 'H1 2026', 'scope = Abu Dhab
 check(d.scopeNote === LOCKED.scope, 'scope note text');
 check(d.source.full === LOCKED.source, 'source text');
 check(d.summaryLine.join(' · ') === '15,500 sales · AED 67.8bn · 82.7% off-plan', 'summary line');
+const pm = d.priceMomentum, cp = d.currentPricing;
+check(pm.residential.display === LOCKED.priceHeadline && pm.residential.value === 21.6 && pm.residential.suffix === 'Y/Y', 'CBRE residential prices = +21.6% Y/Y');
+check(pm.apartments.display === LOCKED.priceApartments && pm.apartments.value === 24.4, 'CBRE apartments = +24.4%');
+check(pm.villas.display === LOCKED.priceVillas && pm.villas.value === 6.3, 'CBRE villas = +6.3%');
+check(pm.source === LOCKED.priceSource, 'CBRE source line');
+check(cp.apartments.display === LOCKED.rateApartments && cp.apartments.value === 17200 && cp.apartments.unit === LOCKED.rateUnit, 'Savills apartments = AED 17,200 / SQM');
+check(cp.villasTownhouses.display === LOCKED.rateVillasTownhouses && cp.villasTownhouses.value === 12100 && cp.villasTownhouses.label === 'Villas & Townhouses', 'Savills villas & townhouses = AED 12,100 / SQM');
+check(cp.source === LOCKED.rateSource && cp.caveat === LOCKED.rateCaveat, 'Savills source + caveat');
+check(d.legal === LOCKED.legal, 'legal line');
+// Display strings must agree with their numeric values (no re-rounding).
+check(Number(pm.residential.display.replace(/[+%]/g, '')) === pm.residential.value, 'CBRE display/value agree');
+check(Number(cp.apartments.display.replace(/[^\d]/g, '')) === cp.apartments.value && Number(cp.villasTownhouses.display.replace(/[^\d]/g, '')) === cp.villasTownhouses.value, 'Savills display/value agree');
 
 // ---- no hard-coded numeric claims in the typography source
-const film = fs.readFileSync('src/Film.tsx', 'utf8');
+const film = ['src/Film.tsx', 'src/PublisherScenes.tsx', 'src/Ending.tsx'].map((f) => fs.readFileSync(f, 'utf8')).join('\n');
 const jsxText = [...film.matchAll(/>([^<>{}]+)</g)].map((x) => x[1].trim()).filter((s) => /\d/.test(s) && !/[;=(){}&|\n]/.test(s));
-const allowed = ['01 / 03', '02 / 03', '03 / 03', 'H1 2026'];
+const allowed = ['01 / 05', '02 / 05', '03 / 05', '04 / 05', '05 / 05', 'H1 2026'];
 // '0' is the visibility:hidden width sizer inside each rolling digit slot.
 const stray = jsxText.filter((s) => s !== '0' && !allowed.some((a) => s.includes(a)));
 check(stray.length === 0, `no stray literal numbers in on-screen JSX text${stray.length ? ': ' + stray.join(' | ') : ''}`);
@@ -52,7 +70,8 @@ if (fs.existsSync(file)) {
   check(s.codec_name === 'h264', 'codec H.264');
   check(s.width === 1080 && s.height === 1920, '1080 × 1920');
   check(s.r_frame_rate === '30/1', '30 fps');
-  check(dur >= 20 && dur <= 24, `duration ${dur.toFixed(3)}s within 20–24s`);
+  // Revision 2 extends the film for two extra evidence scenes + the signature ending.
+  check(Math.abs(dur - 32.4) < 0.05 && Number(s.nb_frames) === 972, `duration ${dur.toFixed(3)}s = 32.4s (972 frames)`);
   check(s.pix_fmt === 'yuv420p', 'yuv420p (phone/social compatible)');
   const audio = execFileSync('npx', ['remotion', 'ffprobe', '-v', 'error', '-select_streams', 'a', '-show_entries', 'stream=index', '-of', 'csv=p=0', file], {stdio: ['ignore', 'pipe', 'ignore']}).toString().trim();
   check(audio === '', 'no audio track (no narration)');

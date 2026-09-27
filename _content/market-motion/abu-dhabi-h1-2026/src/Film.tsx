@@ -2,80 +2,15 @@ import React from 'react';
 import {AbsoluteFill, useCurrentFrame} from 'remotion';
 import data from '../data/market.json';
 import {Field} from './Field';
+import {FONT, FOOT_B, ICE, INK, LegalLine, Mask, MUTED, QUIET, SlotString, VIOLET, X0} from './theme';
+import {Ending} from './Ending';
+import {PublisherScenes} from './PublisherScenes';
 import {
   FPS, H, LAST_LANDING, N, W, anchors, bump, camAt, clamp01, inOutCubic, landedCount, lerp, outCubic,
-  outExpo, outQuint, seg, smooth,
+  outExpo, outQuint, seg, smooth, T,
 } from './world';
 
 const M = data.metrics;
-const INK = '#FFFFFF';
-const ICE = '#AABCFF';
-const VIOLET = '#E0ADF9';
-const MUTED = 'rgba(214,224,255,0.58)';
-const QUIET = 'rgba(214,224,255,0.42)';
-const X0 = 96;
-const FONT = 'Inter, "Helvetica Neue", Arial, sans-serif';
-
-// ------------------------------------------------------------------ helpers
-// Masked line: slides up out of its own mask on entry and exit.
-const Mask: React.FC<{inP: number; outP?: number; children: React.ReactNode; style?: React.CSSProperties; dir?: number}> = ({
-  inP, outP = 0, children, style, dir = 1,
-}) => {
-  const a = outExpo(clamp01(inP));
-  const b = inOutCubic(clamp01(outP));
-  if (a <= 0 || b >= 1) return null;
-  const ty = (1 - a) * 105 * dir - b * 105;
-  const blur = (1 - a) * 8 + b * 8;
-  return (
-    <div style={{overflow: 'hidden', paddingBottom: '0.12em', marginBottom: '-0.12em', ...style}}>
-      <div style={{transform: `translateY(${ty}%)`, filter: blur > 0.2 ? `blur(${blur.toFixed(2)}px)` : undefined, opacity: Math.min(1, a * 1.4) * (1 - b)}}>
-        {children}
-      </div>
-    </div>
-  );
-};
-
-// Rolling digit column with velocity-driven vertical blur.
-const Slot: React.FC<{target: number; p: number; turns?: number; v: number}> = ({target, p, turns = 2, v}) => {
-  const pos = target + turns * 10 * (1 - p);
-  const base = Math.floor(pos);
-  const blur = Math.min(9, v * 0.9);
-  const cells = [];
-  for (let k = base - 1; k <= base + 2; k++) {
-    const d = ((k % 10) + 10) % 10;
-    cells.push(
-      <span key={k} style={{position: 'absolute', left: 0, right: 0, top: `${(k - pos) * 1}em`, textAlign: 'center'}}>
-        {d}
-      </span>,
-    );
-  }
-  return (
-    <span style={{position: 'relative', display: 'inline-block', width: '0.62em', height: '1em', overflow: 'hidden', verticalAlign: 'top', filter: blur > 0.3 ? `blur(${blur.toFixed(2)}px)` : undefined}}>
-      <span style={{visibility: 'hidden'}}>0</span>
-      {cells}
-    </span>
-  );
-};
-
-// Renders a display string ("67.8", "82.7%") with digits as rolling slots.
-const SlotString: React.FC<{text: string; t: number; start: number; dur: number; stagger?: number}> = ({text, t, start, dur, stagger = 0.13}) => {
-  let di = 0;
-  const chars = text.split('');
-  const nd = chars.filter((ch) => /\d/.test(ch)).length;
-  return (
-    <>
-      {chars.map((ch, i) => {
-        if (!/\d/.test(ch)) return <span key={i}>{ch}</span>;
-        const idx = nd - 1 - di++; // last digit settles last
-        const a = start + (nd - 1 - idx) * stagger;
-        const p = outQuint(seg(t, a, a + dur));
-        const p2 = outQuint(seg(t + 1 / FPS, a, a + dur));
-        const v = (p2 - p) * 20 * 2 * FPS / 10;
-        return <Slot key={i} target={Number(ch)} p={p} turns={2 + idx} v={v} />;
-      })}
-    </>
-  );
-};
 
 // Interpolates a docking element between keyed layout states.
 type K = {t: number; x: number; y: number; s: number};
@@ -116,7 +51,7 @@ export const Film: React.FC = () => {
   const kickToFinal = t > 19 ? 1 : 0;
   const kickY = lerp(468, 432, kickToFinal);
   const idx = t < 8.55 ? 0 : t < 13.25 ? 1 : 2;
-  const idxLabels = ['01 / 03 — Transactions', '02 / 03 — Sales value', '03 / 03 — Off-plan share'];
+  const idxLabels = ['01 / 05 — Transactions', '02 / 05 — Sales value', '03 / 05 — Off-plan share'];
   const idxSwitch = [0, 8.55, 13.25][idx];
   const idxP = seg(t, idxSwitch, idxSwitch + 0.6);
 
@@ -175,7 +110,9 @@ export const Film: React.FC = () => {
   const small: React.CSSProperties = {fontSize: 26, letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 500};
 
   const footerOn = bump(t, 3.4, 4.2, 18.4, 19.0);
+  const recapOut = inOutCubic(seg(t, T.recapOut, T.recapOut + 0.6));
   const finalFoot = seg(t, 19.5, 20.4);
+  const legalOn = bump(t, 3.4, 4.2, T.endIn - 0.3, T.endIn + 0.2);
 
   return (
     <AbsoluteFill style={{background: '#090D16', fontFamily: FONT, color: INK, overflow: 'hidden'}}>
@@ -198,17 +135,18 @@ export const Film: React.FC = () => {
       />
 
       {/* ------------------------------------------------ brand bar */}
-      <div style={{position: 'absolute', left: X0, top: 96, right: X0, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', opacity: smooth(seg(t, 0.3, 1.3))}}>
+      <div style={{position: 'absolute', left: X0, top: 96, right: X0, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', opacity: smooth(seg(t, 0.3, 1.3)) * (1 - smooth(seg(t, T.endIn - 0.3, T.endIn + 0.3)))}}>
         <div style={{fontSize: 38, fontWeight: 600, letterSpacing: '-0.02em'}}>sp_ce</div>
         <div style={{...small, fontSize: 19, color: QUIET, letterSpacing: '0.22em'}}>Market intelligence</div>
       </div>
 
-      <div style={{position: 'absolute', inset: 0, transform: `translate(${parX.toFixed(2)}px, ${parY.toFixed(2)}px)`}}>
+      {t < T.recapOut + 0.7 && (
+      <div style={{position: 'absolute', inset: 0, transform: `translate(${parX.toFixed(2)}px, ${(parY - 70 * recapOut).toFixed(2)}px)`, opacity: 1 - recapOut, filter: recapOut > 0.01 ? `blur(${(recapOut * 7).toFixed(2)}px)` : undefined}}>
         {/* ------------------------------------------------ title */}
         {t < 3.7 && (
           <div style={{position: 'absolute', left: X0, top: 600 - 40 * titleDrift - 120 * inOutCubic(titleOut), transform: `scale(${titleScale})`, transformOrigin: '0% 50%'}}>
             <Mask inP={seg(t, 0.55, 1.35)} outP={seg(t, 2.85, 3.4)} style={{marginBottom: 10}}>
-              <div style={{fontSize: 84, fontWeight: 600, letterSpacing: '-0.03em', lineHeight: 1.02}}>ABU DHABI CITY</div>
+              <div style={{fontSize: 84, fontWeight: 600, letterSpacing: '-0.03em', lineHeight: 1.02}}>ABU DHABI</div>
             </Mask>
             <Mask inP={seg(t, 0.8, 1.6)} outP={seg(t, 2.95, 3.5)} style={{marginBottom: 10}}>
               <div style={{fontSize: 84, fontWeight: 300, letterSpacing: '-0.03em', lineHeight: 1.02}}>RESIDENTIAL MARKET</div>
@@ -223,11 +161,11 @@ export const Film: React.FC = () => {
         {/* ------------------------------------------------ kicker + index */}
         <div style={{position: 'absolute', left: X0, top: kickY, right: X0, display: 'flex', justifyContent: 'space-between', opacity: 1 - 0.9 * (bump(t, 8.2, 8.45, 8.95, 9.25) + bump(t, 12.85, 13.1, 13.6, 13.9))}}>
           <Mask inP={t < 19 ? kickIn : seg(t, 19.6, 20.2)} outP={t < 19 ? seg(t, 18.3, 18.8) : 0}>
-            <div style={{...small, color: ICE, letterSpacing: `${lerp(0.4, 0.16, outCubic(kickIn))}em`}}>Abu Dhabi City · Residential · H1 2026</div>
+            <div style={{...small, color: ICE, letterSpacing: `${lerp(0.4, 0.16, outCubic(kickIn))}em`}}>Abu Dhabi · Residential · H1 2026</div>
           </Mask>
         </div>
         {t > 3.4 && t < 18.6 && (
-          <div style={{position: 'absolute', left: X0, top: 1690, right: X0}}>
+          <div style={{position: 'absolute', left: X0, top: 1640, right: X0}}>
             <div style={{height: 1, background: 'rgba(214,224,255,0.18)', marginBottom: 20, width: `${100 * outCubic(seg(t, 3.5, 4.6))}%`}} />
             <Mask key={idx} inP={idx === 0 ? seg(t, 3.7, 4.3) : idxP} outP={idx === 2 ? seg(t, 17.9, 18.5) : seg(t, [8.55, 13.25][idx] - 0.45, [8.55, 13.25][idx])}>
               <div style={{...small, fontSize: 22, color: MUTED}}>{idxLabels[idx]}</div>
@@ -368,25 +306,34 @@ export const Film: React.FC = () => {
           </>
         )}
       </div>
+      )}
+
+      <PublisherScenes t={t} parX={parX} parY={parY} />
+      <Ending t={t} />
 
       {/* ------------------------------------------------ source footer (discreet during film) */}
-      <div style={{position: 'absolute', left: X0, right: X0, top: 1800, fontSize: 21, lineHeight: 1.35, color: QUIET, opacity: footerOn}}>
+      <div style={{position: 'absolute', left: X0, right: X0, bottom: FOOT_B + 40, fontSize: 22, lineHeight: 1.35, color: QUIET, opacity: footerOn}}>
         {data.source.short}
       </div>
 
-      {/* ------------------------------------------------ final footer */}
-      {t > 19.3 && (
-        <div style={{position: 'absolute', left: X0, right: X0, top: 1626, fontSize: 26, lineHeight: 1.42, color: MUTED}}>
-          <div style={{height: 1, background: 'rgba(214,224,255,0.22)', marginBottom: 24, transformOrigin: '0 0', transform: `scaleX(${outCubic(finalFoot)})`}} />
+      {/* ------------------------------------------------ recap footer */}
+      {t > 19.3 && t < T.recapOut + 0.7 && (
+        <div style={{position: 'absolute', left: X0, right: X0, bottom: FOOT_B + 44, fontSize: 25, lineHeight: 1.42, color: MUTED, opacity: 1 - recapOut}}>
+          <div style={{height: 1, background: 'rgba(214,224,255,0.22)', marginBottom: 22, transformOrigin: '0 0', transform: `scaleX(${outCubic(finalFoot)})`}} />
           <Mask inP={seg(t, 19.7, 20.4)}>
             <div>{data.source.full}</div>
           </Mask>
-          <div style={{height: 10}} />
+          <div style={{height: 8}} />
           <Mask inP={seg(t, 19.9, 20.6)}>
             <div style={{color: QUIET}}>{data.scopeNote}</div>
           </Mask>
         </div>
       )}
+
+      {/* ------------------------------------------------ legal line: every scene carrying a market claim */}
+      <div style={{position: 'absolute', left: X0, right: X0, bottom: FOOT_B, opacity: legalOn}}>
+        <LegalLine />
+      </div>
     </AbsoluteFill>
   );
 };

@@ -2,7 +2,7 @@ import React, {useLayoutEffect, useRef} from 'react';
 import {useCurrentFrame} from 'remotion';
 import {
   CONTOURS, FPS, H, LAST_LANDING, N, P, PEAK, PState, VALUE_MULT, W, anchors, bump, camAt, clamp01,
-  inOutCubic, lift, outCubic, particleAt, project, seg, smooth, terrain,
+  fieldPresence, inOutCubic, lift, outCubic, particleAt, project, seg, smooth, terrain,
 } from './world';
 
 const ICE = [170, 188, 255];
@@ -30,7 +30,7 @@ function drawField(ctx: CanvasRenderingContext2D, t: number) {
 
   // ------------------------------------------------------ grid (draped)
   const wake = outCubic(seg(t, 0.15, 2.8)) * 26; // radial reveal radius
-  const gridA = 0.075 * (1 - 0.35 * smooth(seg(t, 18, 20.5)));
+  const gridA = 0.075 * (1 - 0.35 * smooth(seg(t, 18, 20.5))) * (1 - 0.5 * smooth(seg(t, 28.2, 29.4)));
   const gb: Path2D[] = Array.from({length: 6}, () => new Path2D());
   const lineTo = (x0: number, z0: number, x1: number, z1: number) => {
     const r = Math.hypot((x0 + x1) / 2, (z0 + z1) / 2 - 5);
@@ -52,7 +52,7 @@ function drawField(ctx: CanvasRenderingContext2D, t: number) {
   // ------------------------------------------------------ contours (lifted)
   const cb: Path2D[] = Array.from({length: 6}, () => new Path2D());
   const cs = CONTOURS;
-  const contourA = 0.2 * (1 - 0.45 * smooth(seg(t, 13.5, 16))) * (1 - 0.4 * smooth(seg(t, 18.5, 21)));
+  const contourA = 0.2 * (1 - 0.45 * smooth(seg(t, 13.5, 16))) * (1 - 0.4 * smooth(seg(t, 18.5, 21))) * (1 - 0.6 * smooth(seg(t, 28.2, 29.4)));
   for (let k = 0; k < cs.length; k += 5) {
     const lv = cs[k + 4];
     const rev = smooth(seg(t, 0.5 + lv * 2.2, 1.6 + lv * 2.2));
@@ -96,7 +96,7 @@ function drawField(ctx: CanvasRenderingContext2D, t: number) {
   const shutter = 0.55 / FPS;
   const sweepZ = -3 + 24 * inOutCubic(seg(t, 9.4, 12.2));
   const sweepOn = bump(t, 9.4, 9.8, 11.6, 12.3);
-  const glob = 1 - 0.18 * smooth(seg(t, 18.4, 20.6));
+  const glob = (1 - 0.18 * smooth(seg(t, 18.4, 20.6))) * fieldPresence(t);
   for (let i = 0; i < N; i++) {
     particleAt(i, t, s);
     if (s.a <= 0.004) continue;
