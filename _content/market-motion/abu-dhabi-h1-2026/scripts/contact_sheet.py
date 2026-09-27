@@ -5,7 +5,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 MP4 = 'out/abu-dhabi-h1-2026.mp4'
 TMP = 'out/frames'
-TIMES = [0.6, 1.8, 3.4, 4.6, 5.8, 7.8, 9.2, 10.6, 12.4, 13.8, 15.2, 16.8, 18.4, 19.4, 20.6, 22.8, 24.9, 25.9, 26.8, 27.6, 28.6, 29.8, 30.9, 31.6, 32.4, 34.2, 35.4, 36.1, 36.9, 37.3, 37.6, 37.9, 38.2, 39.0, 40.15]
+TIMES = [0.6, 1.8, 3.4, 4.6, 5.8, 7.2, 8.6, 10.2, 12.0, 13.6, 15.0, 17.4, 19.0, 20.6, 22.4, 23.6, 25.2, 26.8, 28.4, 30.0, 32.0, 33.2, 34.4, 35.6, 37.2, 38.6, 40.0, 41.2, 42.6, 43.6, 44.2, 44.6, 45.0, 46.0, 47.35]
 COLS, TW, TH, PAD = 6, 360, 640, 18
 os.makedirs(TMP, exist_ok=True)
 paths = []
@@ -18,7 +18,7 @@ font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 18)
 head = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 24)
 sheet = Image.new('RGB', (COLS * (TW + PAD) + PAD, rows * (TH + PAD + 30) + PAD + 60), (18, 20, 28))
 d = ImageDraw.Draw(sheet)
-d.text((PAD, 20), 'sp_ce — Abu Dhabi City residential H1 2026 — market-motion key frames (1080x1920, 30fps, 40.2s)', fill=(210, 220, 255), font=head)
+d.text((PAD, 20), 'sp_ce — Abu Dhabi City residential H1 2026 — market-motion key frames (1080x1920, 30fps, 47.4s)', fill=(210, 220, 255), font=head)
 for i, (t, p) in enumerate(zip(TIMES, paths)):
     im = Image.open(p).convert('RGB').resize((TW, TH), Image.LANCZOS)
     x = PAD + (i % COLS) * (TW + PAD)

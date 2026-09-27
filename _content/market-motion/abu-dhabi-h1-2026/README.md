@@ -1,6 +1,6 @@
 # sp_ce — Abu Dhabi City Residential Market, H1 2026 · market-motion film
 
-A code-rendered, vertical market-motion film for Instagram Reels (1080 × 1920, 30 fps, 40.2 s, H.264, no audio), built in Remotion.
+A code-rendered, vertical market-motion film for Instagram Reels (1080 × 1920, 30 fps, 47.4 s, H.264, no audio), built in Remotion.
 Every mark on screen is drawn from code: no image generation, stock footage or AI imagery.
 
 | Output | Path |
@@ -51,6 +51,41 @@ compare them with the reference itself.
 - **Deliberately not copied.** The reference's subject matter, artwork, branding, palette, typefaces and specific shots.
   The film also avoids real-estate clichés (buildings, keys, aerials, handshakes), hype language and CTAs.
 
+## sp_ce design-system pack: status for this job
+
+The pack (`/sp_ce-design-system-pack`, v1.0.0) was read after the film was approved. The client chose
+**option B**: keep the approved Reel, apply only the fixes that don't conflict with it, and treat the rest
+as approved exceptions for this job.
+
+**Applied (pack-compliant)**
+- **Font:** Inter is loaded from the pack's `ASSETS/fonts/Inter-VariableFont_slnt_wght.ttf`, a byte-identical copy
+  in `public/fonts/`. The render fails if it doesn't load.
+- **Tokens:** `tokens/design-tokens.json` is a byte-identical copy of the pack file, and `src/tokens.ts` reads
+  colours and sizes from it by name. No hex values are typed into the source.
+- **Secondary text:** Cloud `text-on-dark-2`. Metadata, sources and the licence line use Mist `text-on-dark-3`, and
+  hairlines use `hairline-dark`.
+- **Number reveals:** the value fades in whole with a 16px rise (`motion.distance-px.statistic-rise`).
+- **Holds:** every text frame stays fully readable for at least 2.5 s (`min-hold-per-statistic`), and the end card
+  holds for 2.5 s. To get there without re-cutting the approved choreography, a smooth time-map (`world.ts`, `HOLDS`)
+  eases the whole world down to a slower speed across each hold, then back up. Relative timing is unchanged and the
+  motion never stops. `scripts/holds.ts` reports every hold, and `npm run verify` enforces them.
+
+**Approved job-specific exceptions (not changed)**
+1. Weights 700–800 for hero metrics and the title.
+2. Sources and scene counters set in Inter, not JetBrains Mono.
+3. The licence line on every scene with a market claim.
+4. Safe area x 96–984, y 220–1600.
+5. The official `small.svg` (white) is used as the logo, rather than the pack's PNG.
+6. The morph ending ("find your" / "space" → sp_ce).
+7. The three-number summary, and two rates on one frame.
+8. Title in capitals.
+9. Source-line wording kept as approved.
+10. Soft Violet accents.
+11. Scene counters with em dashes, and rule lines.
+
+The cinematic motion language is also an exception: the travelling camera, depth and parallax, particle arrivals,
+bloom, motion-blur streaks and light sweeps.
+
 ## Final production pass (Reels)
 
 - **Brand system.**
@@ -82,8 +117,8 @@ compare them with the reference itself.
   proportion (about 650 × 274 px). It sits on whole pixels with no transform, and there are no blended frames, so
   nothing can ghost. The logo holds for 2.2 s with the licence line.
 
-Timeline: title 0–3.6 s · transactions 3–8.5 · sales value 8.5–13.3 · off-plan 13.3–18.4 · H1 summary 18.4–25.6 ·
-CBRE 25.7–30.5 · Savills 30.7–35.5 · ending 35.6–40.2.
+Timeline (world time; the film runs 47.4 s once the hold time-map is applied): title 0–3.6 s, transactions 3–8.5,
+sales value 8.5–13.3, off-plan 13.3–18.4, H1 summary 18.4–25.7, CBRE 25.7–30.5, Savills 30.7–35.5, ending 35.6–40.5.
 
 ## Revision 2 (after first-draft approval)
 

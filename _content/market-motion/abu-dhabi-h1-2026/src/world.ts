@@ -7,8 +7,7 @@ import data from '../data/market.json';
 export const W = 1080;
 export const H = 1920;
 export const FPS = 30;
-export const DURATION_S = 40.2;
-export const DURATION = Math.round(FPS * DURATION_S);
+// World time runs 0 → WORLD_END. Film frames map onto it through the hold time-map below.
 
 // One light point per recorded transaction.
 export const N = data.metrics.transactions.value; // 15,500
@@ -145,7 +144,7 @@ export const SPLIT_GAP = 0.55;
 
 // Timeline anchors for the revision (seconds).
 export const T = {
-  recapOut: 25.0, // H1 three-number summary leaves (readable ~20.4–25.0)
+  recapOut: 25.1, // H1 three-number summary leaves (readable ~20.6–25.1)
   priceIn: 25.7, priceOut: 30.5, // CBRE price momentum
   rateIn: 30.7, rateOut: 35.5, // Savills current pricing
   endIn: 35.6, // signature ending
@@ -334,3 +333,41 @@ export function annotationBox(t: number) {
   const curveTop = Math.min(an.crest.y, ...under.map((p) => p.y));
   return {left, top: curveTop - gap - height, anchorX: left - 14, anchorY: curveTop - gap - height / 2, crest: an.crest};
 }
+
+// ------------------------------------------------------------ hold time-map
+// Each text frame must stay fully readable for ≥ 2.5 s (pack motion.min-hold-per-statistic).
+// Rather than re-cut the approved choreography, the whole world (camera, particles, text)
+// eases down to a slower speed across each hold window and back up again, so relative
+// timing is unchanged and motion never stops.
+export const WORLD_END = 40.5; // end-card: logo lands at 38.0 → 2.5 s hold (motion.duration-video-ms.end-card-hold)
+const HOLD_FILM_S = 2.6;
+const HOLDS = [
+  {w0: 7.6, w1: 8.15}, // 15,500 + label + y/y + scope caveat all fully in
+  {w0: 12.25, w1: 12.8}, // AED 67.8bn + label + +177.9% annotation
+  {w0: 16.0, w1: 17.6}, // 82.7% + labels + share-bar labels
+];
+const RAMP = 0.35;
+export function worldSpeedAt(w: number) {
+  let s = 1;
+  for (const h of HOLDS) {
+    const r = (h.w1 - h.w0) / HOLD_FILM_S;
+    let k = 1;
+    if (w >= h.w0 && w <= h.w1) k = r;
+    else if (w > h.w0 - RAMP && w < h.w0) k = 1 - (1 - r) * smooth((w - (h.w0 - RAMP)) / RAMP);
+    else if (w > h.w1 && w < h.w1 + RAMP) k = r + (1 - r) * smooth((w - h.w1) / RAMP);
+    s = Math.min(s, k);
+  }
+  return s;
+}
+const WORLD_T = (() => {
+  const out: number[] = [];
+  let w = 0;
+  while (w <= WORLD_END) {
+    out.push(w);
+    w += worldSpeedAt(w) / FPS;
+  }
+  return Float64Array.from(out);
+})();
+export const DURATION = WORLD_T.length;
+export const worldTime = (frame: number) => WORLD_T[Math.max(0, Math.min(frame, WORLD_T.length - 1))];
+export const worldSpeed = (frame: number) => worldSpeedAt(worldTime(frame));

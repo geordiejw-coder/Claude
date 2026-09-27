@@ -3,11 +3,11 @@ import {Composition, continueRender, delayRender, staticFile} from 'remotion';
 import {Film} from './Film';
 import {DURATION, FPS, H, W} from './world';
 
-// Inter Variable (rsms Inter 4, SIL OFL) is the ONLY typeface in the film. It is bundled
-// locally and registered as family "Inter" across the full 100–900 weight axis.
+// Inter (variable) from the sp_ce pack, ASSETS/fonts/Inter-VariableFont_slnt_wght.ttf, is the ONLY
+// typeface in the film, registered as family "Inter" across the 100–900 weight axis.
 // Rendering fails if it does not load, so no fallback face can ever be substituted.
 const fontHandle = delayRender('Loading Inter Variable');
-const inter = new FontFace('Inter', `url(${staticFile('fonts/InterVariable-latin.woff2')}) format('woff2')`, {weight: '100 900', style: 'normal'});
+const inter = new FontFace('Inter', `url(${staticFile('fonts/Inter-VariableFont_slnt_wght.ttf')}) format('truetype')`, {weight: '100 900', style: 'normal'});
 inter
   .load()
   .then((f) => {

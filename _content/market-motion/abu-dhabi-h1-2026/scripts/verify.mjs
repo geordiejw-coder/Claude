@@ -62,7 +62,17 @@ check(stray.length === 0, `no stray literal numbers in on-screen JSX text${stray
 const src = fs.readdirSync('src').map((f) => fs.readFileSync(`src/${f}`, 'utf8')).join('\n');
 check(!/SlotString|landedCount\(t\)\.toLocaleString|count-up/i.test(src.replace(/\/\/.*$/gm, '')), 'no rolling digits or count-up in the typography');
 check(!/Arial|Helvetica|sans-serif|system-ui/.test(src), 'no fallback / substitute font families referenced');
-check(/export const FONT = 'Inter';/.test(src) && fs.existsSync('public/fonts/InterVariable-latin.woff2'), 'Inter Variable is the only registered family');
+check(/export const FONT = 'Inter';/.test(src), 'Inter is the only registered family');
+
+// ---- design-system pack (sp_ce-design-system-pack): no-conflict items for this job
+const PACK = '../../../sp_ce-design-system-pack';
+const same = (a, b) => fs.readFileSync(a).equals(fs.readFileSync(b));
+check(same('tokens/design-tokens.json', `${PACK}/design-tokens.json`), 'tokens/design-tokens.json is the pack file, byte-for-byte');
+check(same('public/fonts/Inter-VariableFont_slnt_wght.ttf', `${PACK}/ASSETS/fonts/Inter-VariableFont_slnt_wght.ttf`), 'Inter loaded from the pack ASSETS/fonts file, byte-for-byte');
+check(!/#[0-9A-Fa-f]{6}\b/.test(['theme.tsx', 'Film.tsx', 'PublisherScenes.tsx', 'Ending.tsx', 'Field.tsx', 'SceneParticles.tsx', 'publisherLayout.ts'].map((f) => fs.readFileSync(`src/${f}`, 'utf8')).join('\n')), 'no typed hex colours: all colours referenced by token name');
+check(!/rgba\(\s*\d/.test(['theme.tsx', 'Film.tsx', 'PublisherScenes.tsx', 'Ending.tsx', 'publisherLayout.ts'].map((f) => fs.readFileSync(`src/${f}`, 'utf8')).join('\n')), 'no literal rgba() colours in typography/layout (token-derived only)');
+const holds = JSON.parse(execFileSync('npx', ['tsx', 'scripts/holds.ts'], {stdio: ['ignore', 'pipe', 'ignore']}).toString());
+for (const h of holds.holds) check(h.seconds >= (h.name.startsWith('H1 three') ? 4.5 : 2.5), `hold ${h.seconds}s: ${h.name}`);
 check(!/#090D16|rgba\(9,13,22|rgba\(214,224,255|rgba\(28,40,78/.test(src), 'palette: no off-brand navy / tinted greys remain');
 check(fs.readFileSync('public/brand/sp_ce-logo.svg', 'utf8') === fs.readFileSync('../../../small.svg', 'utf8'), 'end logo is the supplied official SVG, byte-for-byte');
 
@@ -79,8 +89,8 @@ if (fs.existsSync(file)) {
   check(s.codec_name === 'h264', 'codec H.264');
   check(s.width === 1080 && s.height === 1920, '1080 × 1920');
   check(s.r_frame_rate === '30/1', '30 fps');
-  // Final revision: 4.5 s summary, particle-built publisher scenes, 2 s logo hold.
-  check(Math.abs(dur - 40.2) < 0.05 && Number(s.nb_frames) === 1206, `duration ${dur.toFixed(3)}s = 40.2s (1206 frames)`);
+  // Duration comes from the hold time-map (scripts/holds.ts).
+  check(Number(s.nb_frames) === holds.frames && Math.abs(dur - holds.frames / 30) < 0.05, `duration ${dur.toFixed(3)}s = ${holds.frames} frames (time-map)`);
   check(s.pix_fmt === 'yuv420p', 'yuv420p (phone/social compatible)');
   const audio = execFileSync('npx', ['remotion', 'ffprobe', '-v', 'error', '-select_streams', 'a', '-show_entries', 'stream=index', '-of', 'csv=p=0', file], {stdio: ['ignore', 'pipe', 'ignore']}).toString().trim();
   check(audio === '', 'no audio track (no narration)');

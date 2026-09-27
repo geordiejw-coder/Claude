@@ -1,13 +1,14 @@
 import React, {useLayoutEffect, useRef} from 'react';
 import {useCurrentFrame} from 'remotion';
+import {color, rgb, rgba as rgbaTok} from './tokens';
 import {
   CONTOURS, FPS, H, LAST_LANDING, annotationBox, N, P, PEAK, PState, VALUE_MULT, W, anchors, bump, camAt, clamp01,
-  fieldPresence, T, inOutCubic, lift, outCubic, particleAt, project, seg, smooth, terrain,
+  fieldPresence, T, inOutCubic, worldSpeed, worldTime, lift, outCubic, particleAt, project, seg, smooth, terrain,
 } from './world';
 
-const ICE = [170, 188, 255];
-const PALE = [255, 255, 255];
-const VIOLET = [224, 173, 249];
+const ICE = rgb(color.spIceBlue);
+const PALE = rgb(color.spWhite);
+const VIOLET = rgb(color.softViolet);
 const mix = (a: number[], b: number[], k: number) => a.map((v, i) => Math.round(v + (b[i] - v) * k));
 const rgba = (c: number[], a: number) => `rgba(${c[0]},${c[1]},${c[2]},${a.toFixed(3)})`;
 
@@ -22,7 +23,7 @@ function depthFade(d: number) {
   return smooth(seg(d, 0.9, 3.0)) * (1 - 0.75 * smooth(seg(d, 14, 34)));
 }
 
-function drawField(ctx: CanvasRenderingContext2D, t: number) {
+function drawField(ctx: CanvasRenderingContext2D, t: number, speed: number) {
   ctx.clearRect(0, 0, W, H);
   const c = camAt(t);
   const L = lift(t);
@@ -93,7 +94,7 @@ function drawField(ctx: CanvasRenderingContext2D, t: number) {
   const buckets: Path2D[] = Array.from({length: NB}, () => new Path2D());
   const s: PState = {x: 0, y: 0, z: 0, a: 0, tint: 0, flash: 0};
   const sp: PState = {x: 0, y: 0, z: 0, a: 0, tint: 0, flash: 0};
-  const shutter = 0.55 / FPS;
+  const shutter = (0.55 / FPS) * speed; // 180° shutter in film time
   const sweepZ = -3 + 24 * inOutCubic(seg(t, 9.4, 12.2));
   const sweepOn = bump(t, 9.4, 9.8, 11.6, 12.3);
   const glob = (1 - 0.18 * smooth(seg(t, 18.4, 20.6))) * fieldPresence(t);
@@ -155,13 +156,13 @@ function drawField(ctx: CanvasRenderingContext2D, t: number) {
       ctx.stroke();
       ctx.setLineDash([]);
     };
-    prof(VALUE_MULT, [6, 7], `rgba(255,255,255,${(0.45 * m).toFixed(3)})`, 1.4);
-    prof(1, [], `rgba(170,188,255,${(0.9 * m).toFixed(3)})`, 2);
+    prof(VALUE_MULT, [6, 7], rgbaTok(color.spWhite, 0.45 * m), 1.4);
+    prof(1, [], rgbaTok(color.spIceBlue, 0.9 * m), 2);
     if (an.crest && an.ghost) {
       const k = inOutCubic(seg(t, 10.8, 11.7));
       const x = an.crest.x + 0; // bracket at crest
       const yb = an.ghost.y, yt = yb + (an.crest.y - yb) * k;
-      ctx.strokeStyle = `rgba(255,255,255,${(0.85 * m).toFixed(3)})`;
+      ctx.strokeStyle = rgbaTok(color.spWhite, 0.85 * m);
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.moveTo(x, yb); ctx.lineTo(x, yt);
@@ -188,13 +189,13 @@ function drawField(ctx: CanvasRenderingContext2D, t: number) {
     const k = outCubic(seg(t, 14.6, 15.8));
     const yo = 46;
     ctx.lineWidth = 2;
-    ctx.strokeStyle = `rgba(170,188,255,${(0.95 * sb).toFixed(3)})`;
+    ctx.strokeStyle = rgbaTok(color.spIceBlue, 0.95 * sb);
     ctx.beginPath();
     ctx.moveTo(l.x, l.y + yo); ctx.lineTo(l.x + (m1.x - l.x) * k, l.y + yo + (m1.y - l.y) * k);
     ctx.moveTo(l.x, l.y + yo - 9); ctx.lineTo(l.x, l.y + yo + 9);
     if (k > 0.99) { ctx.moveTo(m1.x, m1.y + yo - 9); ctx.lineTo(m1.x, m1.y + yo + 9); }
     ctx.stroke();
-    ctx.strokeStyle = `rgba(224,173,249,${(0.6 * sb).toFixed(3)})`;
+    ctx.strokeStyle = rgbaTok(color.softViolet, 0.6 * sb);
     ctx.beginPath();
     ctx.moveTo(m2.x, m2.y + yo); ctx.lineTo(m2.x + (r.x - m2.x) * k, m2.y + yo + (r.y - m2.y) * k);
     ctx.moveTo(m2.x, m2.y + yo - 9); ctx.lineTo(m2.x, m2.y + yo + 9);
@@ -232,9 +233,9 @@ export const Field: React.FC = () => {
   const bloom = useRef<HTMLCanvasElement>(null);
   const grain = useRef<HTMLCanvasElement>(null);
   useLayoutEffect(() => {
-    const t = frame / FPS;
+    const t = worldTime(frame);
     const ctx = main.current!.getContext('2d')!;
-    drawField(ctx, t);
+    drawField(ctx, t, worldSpeed(frame));
     const b = bloom.current!.getContext('2d')!;
     b.clearRect(0, 0, W / 4, H / 4);
     b.drawImage(main.current!, 0, 0, W / 4, H / 4);

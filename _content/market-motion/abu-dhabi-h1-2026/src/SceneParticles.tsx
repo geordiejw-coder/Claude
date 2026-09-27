@@ -8,7 +8,8 @@
 //    whose lengths are proportional to the two rates.
 import React, {useLayoutEffect, useRef} from 'react';
 import {useCurrentFrame} from 'remotion';
-import {FPS, H, T, W, clamp01, inOutCubic, mulberry32, outCubic, seg, smooth} from './world';
+import {FPS, H, T, W, clamp01, inOutCubic, mulberry32, outCubic, seg, smooth, worldSpeed, worldTime} from './world';
+import {color, rgb} from './tokens';
 import {PRICE, RATE, fieldRowDx, fieldRowY} from './publisherLayout';
 import {X0} from './theme';
 
@@ -37,7 +38,7 @@ const PRICE_PTS: Pt[] = (() => {
     if (i % 4 === 3) continue; // dashes
     const f = i / (m - 1);
     const ty = PRICE.markerY0 + f * (PRICE.markerY1 - PRICE.markerY0);
-    pts.push({tx: PRICE.markerX, ty, sx: PRICE.markerX, sy: ty - 16, t0: a + 2.0 + f * 0.45, dur: 0.35, size: 2.0, a: 0.9, col: [255, 255, 255], ph: 0, z: 0, kind: 1});
+    pts.push({tx: PRICE.markerX, ty, sx: PRICE.markerX, sy: ty - 16, t0: a + 2.0 + f * 0.45, dur: 0.35, size: 2.0, a: 0.9, col: rgb(color.spWhite), ph: 0, z: 0, kind: 1});
   }
   return pts;
 })();
@@ -66,13 +67,13 @@ const RATE_PTS: Pt[] = (() => {
 })();
 
 const AL = 8;
-function draw(ctx: CanvasRenderingContext2D, t: number) {
+function draw(ctx: CanvasRenderingContext2D, t: number, speed: number) {
   ctx.clearRect(0, 0, W, H);
   const inPrice = t > T.priceIn && t < T.priceOut + 0.1;
   const inRate = t > T.rateIn && t < T.rateOut + 0.1;
   if (!inPrice && !inRate) return;
   const pts = inPrice ? PRICE_PTS : RATE_PTS;
-  const shutter = 0.3 / FPS;
+  const shutter = (0.3 / FPS) * speed;
   const exitK = inPrice ? inOutCubic(seg(t, T.priceOut - 0.6, T.priceOut)) : inOutCubic(seg(t, T.rateOut - 0.6, T.rateOut));
   const sweepX = X0 - 120 + 1100 * inOutCubic(seg(t, T.priceIn + 2.55, T.priceIn + 3.3));
   const sweepOn = inPrice ? smooth(seg(t, T.priceIn + 2.5, T.priceIn + 2.7)) * (1 - smooth(seg(t, T.priceIn + 3.1, T.priceIn + 3.35))) : 0;
@@ -143,7 +144,7 @@ export const SceneParticles: React.FC<{t: number}> = ({t}) => {
   const frame = useCurrentFrame();
   const ref = useRef<HTMLCanvasElement>(null);
   useLayoutEffect(() => {
-    draw(ref.current!.getContext('2d')!, frame / FPS);
+    draw(ref.current!.getContext('2d')!, worldTime(frame), worldSpeed(frame));
   }, [frame]);
   void t;
   return <canvas ref={ref} width={W} height={H} style={{position: 'absolute', inset: 0}} />;

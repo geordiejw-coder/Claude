@@ -1,5 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, useCurrentFrame} from 'remotion';
+import {rgba} from './tokens';
 import data from '../data/market.json';
 import {Field} from './Field';
 import {Ending} from './Ending';
@@ -7,9 +8,9 @@ import {PublisherScenes} from './PublisherScenes';
 import {SceneParticles} from './SceneParticles';
 import {
   BLACK, COL_W, FONT, Fade, HAIR, HEADER_INK_TOP, ICE, INDEX_TOP, INK, LEGAL_BOTTOM, LegalLine, Logo, Mask, MUTED, QUIET,
-  SourceLines, VIOLET, W_HERO, W_LABEL, W_SOURCE, W_TITLE, X0, X1,
+  RISE, SourceLines, VIOLET, W_HERO, W_LABEL, W_SOURCE, W_TITLE, X0, X1,
 } from './theme';
-import {FPS, H, LAST_LANDING, W, anchors, annotationBox, bump, camAt, clamp01, inOutCubic, lerp, outCubic, outExpo, seg, smooth, T} from './world';
+import {FPS, H, LAST_LANDING, W, anchors, annotationBox, worldTime, bump, camAt, clamp01, inOutCubic, lerp, outCubic, outExpo, seg, smooth, T} from './world';
 
 const M = data.metrics;
 
@@ -34,10 +35,11 @@ const BIG_Y = 520;
 const LEDGER_Y = [300, 350];
 const FINAL_Y = [498, 720, 942];
 const KICK_Y = 468;
+const rise = (p: number) => `translateY(${(RISE * (1 - inOutCubic(clamp01(p)))).toFixed(2)}px)`;
 
 export const Film: React.FC = () => {
   const frame = useCurrentFrame();
-  const t = frame / FPS;
+  const t = worldTime(frame); // world time (hold time-map applied)
   const cam = camAt(t);
   const an = anchors(t);
   const ann = annotationBox(t);
@@ -98,7 +100,7 @@ export const Film: React.FC = () => {
   const ledgerCol = (dk: {s: number}) => {
     // numbers dim while parked in the ledger, then return to full white
     const k = clamp01((dk.s - LED) / (FIN - LED));
-    return `rgba(255,255,255,${(0.66 + 0.34 * k).toFixed(3)})`;
+    return rgba(INK, 0.66 + 0.34 * k);
   };
   const finalIn = (a: number) => seg(t, a, a + 0.7);
 
@@ -123,19 +125,19 @@ export const Film: React.FC = () => {
       {/* atmosphere: faint ice-blue lift toward the horizon */}
       <AbsoluteFill
         style={{
-          background: `radial-gradient(120% 55% at 50% ${(cam.py / H) * 100 - 6}%, rgba(170,188,255,${(0.075 + 0.035 * bump(t, 8, 10.5, 12.5, 14)).toFixed(3)}) 0%, rgba(170,188,255,0.025) 45%, rgba(0,0,0,0) 75%)`,
+          background: `radial-gradient(120% 55% at 50% ${(cam.py / H) * 100 - 6}%, ${rgba(ICE, 0.075 + 0.035 * bump(t, 8, 10.5, 12.5, 14))} 0%, ${rgba(ICE, 0.025)} 45%, ${rgba(BLACK, 0)} 75%)`,
           opacity: smooth(seg(t, 0, 2.2)),
         }}
       />
       <Field />
       <SceneParticles t={t} />
-      <AbsoluteFill style={{background: 'radial-gradient(140% 90% at 50% 45%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.85) 100%)'}} />
+      <AbsoluteFill style={{background: `radial-gradient(140% 90% at 50% 45%, ${rgba(BLACK, 0)} 55%, ${rgba(BLACK, 0.85)} 100%)`}} />
       {/* legibility scrim behind the top typography */}
-      <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0) 48%)'}} />
+      <AbsoluteFill style={{background: `linear-gradient(180deg, ${rgba(BLACK, 0.9)} 0%, ${rgba(BLACK, 0.6)} 30%, ${rgba(BLACK, 0)} 48%)`}} />
       <div
         style={{
           position: 'absolute', left: 0, right: 0, top: 1290, bottom: 0, opacity: scrimOn,
-          background: 'linear-gradient(180deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0.96) 95px, #000 160px)',
+          background: `linear-gradient(180deg, ${rgba(BLACK, 0)} 0px, ${rgba(BLACK, 0.96)} 95px, ${BLACK} 160px)`,
         }}
       />
 
@@ -161,7 +163,7 @@ export const Film: React.FC = () => {
               <Mask inP={seg(t, 1.05, 1.85)} outP={seg(t, 3.05, 3.6)}>
                 <div style={{fontSize: 84, fontWeight: W_LABEL, letterSpacing: '-0.03em', lineHeight: 1.02, color: ICE}}>H1 2026</div>
               </Mask>
-              <div style={{height: 2, marginTop: 34, width: 420 * outCubic(seg(t, 1.4, 2.6)), background: `linear-gradient(90deg, ${ICE}, rgba(170,188,255,0))`, opacity: 1 - seg(t, 2.8, 3.3)}} />
+              <div style={{height: 2, marginTop: 34, width: 420 * outCubic(seg(t, 1.4, 2.6)), background: `linear-gradient(90deg, ${ICE}, ${rgba(ICE, 0)})`, opacity: 1 - seg(t, 2.8, 3.3)}} />
             </div>
           )}
 
@@ -174,7 +176,7 @@ export const Film: React.FC = () => {
 
           {/* ------------------------------------------------ metric 1 */}
           {t > LAST_LANDING - 0.4 && (
-            <div style={{...numStyle(m1), color: ledgerCol(m1), opacity: inOutCubic(n1In)}}>
+            <div style={{...numStyle(m1), color: ledgerCol(m1), opacity: inOutCubic(n1In), transform: rise(n1In)}}>
               <span>{M.transactions.display}</span>
               {t > 18.8 && (
                 <span style={{fontSize: '0.36em', fontWeight: W_LABEL, letterSpacing: '-0.01em', marginLeft: '0.35em', opacity: smooth(finalIn(19.5))}}>sales</span>
@@ -182,14 +184,14 @@ export const Film: React.FC = () => {
             </div>
           )}
           {/* resolve underline sweep */}
-          <div style={{position: 'absolute', left: X0, top: BIG_Y + BIG * 1.02, height: 2, width: 700 * outExpo(resolve), background: `linear-gradient(90deg, ${ICE}, rgba(170,188,255,0))`, opacity: 1 - seg(t, 8.0, 8.5)}} />
+          <div style={{position: 'absolute', left: X0, top: BIG_Y + BIG * 1.02, height: 2, width: 700 * outExpo(resolve), background: `linear-gradient(90deg, ${ICE}, ${rgba(ICE, 0)})`, opacity: 1 - seg(t, 8.0, 8.5)}} />
           {t < 8.9 && t > LAST_LANDING - 0.4 && (
             <div style={{position: 'absolute', left: X0, right: 1080 - X1, top: BIG_Y + BIG + 34}}>
-              <Mask inP={seg(t, LAST_LANDING - 0.2, LAST_LANDING + 0.4)} outP={seg(t, 8.15, 8.7)}>
+              <Mask inP={seg(t, LAST_LANDING - 0.25, LAST_LANDING + 0.2)} outP={seg(t, 8.15, 8.7)}>
                 <div style={labelBig}>residential transactions</div>
               </Mask>
               <div style={{height: 14}} />
-              <Fade inP={seg(t, LAST_LANDING + 0.25, LAST_LANDING + 0.6)} outP={seg(t, 8.2, 8.6)}>
+              <Fade inP={seg(t, LAST_LANDING - 0.1, LAST_LANDING + 0.25)} outP={seg(t, 8.2, 8.6)}>
                 <div style={{fontSize: 34, color: ICE, fontWeight: W_LABEL, letterSpacing: '0.01em', fontVariantNumeric: 'tabular-nums'}}>
                   <span style={{display: 'inline-block', width: 36, height: 2, background: ICE, verticalAlign: 'middle', marginRight: 14}} />
                   {M.transactions.yoy.display}
@@ -197,7 +199,7 @@ export const Film: React.FC = () => {
               </Fade>
               <div style={{height: 12}} />
               {/* scope caveat beside the first 15,500 claim */}
-              <Fade inP={seg(t, LAST_LANDING + 0.35, LAST_LANDING + 0.75)} outP={seg(t, 8.2, 8.6)}>
+              <Fade inP={seg(t, LAST_LANDING + 0.0, LAST_LANDING + 0.35)} outP={seg(t, 8.2, 8.6)}>
                 <div style={{fontSize: 24, fontWeight: W_SOURCE, lineHeight: 1.35, color: MUTED, maxWidth: COL_W}}>{data.firstClaimCaveat}</div>
               </Fade>
             </div>
@@ -208,7 +210,7 @@ export const Film: React.FC = () => {
 
           {/* ------------------------------------------------ metric 2 */}
           {t > 8.95 && (
-            <div style={{...numStyle(m2), color: ledgerCol(m2), opacity: inOutCubic(n2In)}}>
+            <div style={{...numStyle(m2), color: ledgerCol(m2), opacity: inOutCubic(n2In), transform: rise(n2In)}}>
               <span style={{fontSize: '0.4em', fontWeight: W_LABEL, letterSpacing: '0em', marginRight: '0.22em'}}>AED</span>
               <span>{valueNum}</span>
               <span style={{fontSize: '0.4em', fontWeight: W_LABEL, letterSpacing: '0em', marginLeft: '0.08em'}}>bn</span>
@@ -233,7 +235,7 @@ export const Film: React.FC = () => {
 
           {/* ------------------------------------------------ metric 3 */}
           {t > 14.15 && (
-            <div style={{...numStyle(m3), color: t < 18.2 ? ICE : INK, opacity: inOutCubic(n3In)}}>
+            <div style={{...numStyle(m3), color: t < 18.2 ? ICE : INK, opacity: inOutCubic(n3In), transform: rise(n3In)}}>
               <span>{M.offPlanShare.display.replace('%', '')}</span>
               <span style={{fontSize: '0.62em', marginLeft: '0.03em'}}>%</span>
               {t > 18.8 && (

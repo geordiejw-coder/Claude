@@ -3,17 +3,19 @@ import React from 'react';
 import {Img, staticFile} from 'remotion';
 import data from '../data/market.json';
 import {LOGO} from './brand';
+import {color, motion, scale} from './tokens';
 import {clamp01, inOutCubic, outExpo} from './world';
 
-// ---------------------------------------------------------------- palette
-// Pure black and white; Ice Blue / Soft Violet only as restrained accents.
-export const BLACK = '#000000';
-export const INK = '#FFFFFF';
-export const ICE = '#AABCFF';
-export const VIOLET = '#E0ADF9';
-export const MUTED = 'rgba(255,255,255,0.66)';
-export const QUIET = 'rgba(255,255,255,0.56)';
-export const HAIR = 'rgba(255,255,255,0.16)';
+// ---------------------------------------------------------------- palette (tokens by name)
+// Pure black ground and white type; Ice Blue / Soft Violet as accents (approved job exception
+// for Soft Violet on the remainder / villa figures).
+export const BLACK = color.spBlack;
+export const INK = color.textOnDark1; // sp-white
+export const ICE = color.spIceBlue;
+export const VIOLET = color.softViolet;
+export const MUTED = color.textOnDark2; // sp-cloud: secondary text
+export const QUIET = color.textOnDark3; // sp-mist: metadata, sources, licence
+export const HAIR = color.hairlineDark;
 
 // ---------------------------------------------------------------- type
 // Inter Variable only (registered in Root.tsx; the render fails if it is missing).
@@ -49,22 +51,24 @@ export const Mask: React.FC<{inP: number; outP?: number; children: React.ReactNo
   );
 };
 
-// Frame-stable number reveal: opacity only — no motion, blur, rolling or count-up.
+// Pack number-reveal: value appears whole, opacity 0 → 1 with a 16px rise. No rolling or blur.
+export const RISE = motion['distance-px']['statistic-rise'];
 export const Fade: React.FC<{inP: number; outP?: number; children: React.ReactNode; style?: React.CSSProperties}> = ({inP, outP = 0, children, style}) => {
-  const o = inOutCubic(clamp01(inP)) * (1 - inOutCubic(clamp01(outP)));
+  const e = inOutCubic(clamp01(inP));
+  const o = e * (1 - inOutCubic(clamp01(outP)));
   if (o <= 0) return null;
-  return <div style={{opacity: o, ...style}}>{children}</div>;
+  return <div style={{opacity: o, transform: `translateY(${(RISE * (1 - e)).toFixed(2)}px)`, ...style}}>{children}</div>;
 };
 
 export const LegalLine: React.FC<{align?: 'left' | 'center'}> = ({align = 'left'}) => (
-  <div style={{fontSize: 22, fontWeight: W_SOURCE, lineHeight: 1.3, color: 'rgba(255,255,255,0.66)', letterSpacing: '0.01em', textAlign: align, whiteSpace: 'nowrap'}}>
+  <div style={{fontSize: scale['licence-footer'].size, fontWeight: scale['licence-footer'].weight, lineHeight: 1.3, color: QUIET, letterSpacing: '0.01em', textAlign: align, whiteSpace: 'nowrap'}}>
     {data.legal}
   </div>
 );
 
 // Source / period lines, bottom-aligned just above the licence line.
 export const SourceLines: React.FC<{lines: string[]; opacity: number}> = ({lines, opacity}) => (
-  <div style={{position: 'absolute', left: X0, right: 1080 - X1, top: SOURCE_BOTTOM, transform: 'translateY(-100%)', fontSize: 22, fontWeight: W_SOURCE, lineHeight: 1.4, color: QUIET, opacity}}>
+  <div style={{position: 'absolute', left: X0, right: 1080 - X1, top: SOURCE_BOTTOM, transform: 'translateY(-100%)', fontSize: scale['source-line'].size, fontWeight: W_SOURCE, lineHeight: 1.4, color: QUIET, opacity}}>
     {lines.map((l, i) => (
       <div key={i}>{l}</div>
     ))}
