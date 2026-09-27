@@ -1,17 +1,13 @@
-// Signature-ending configuration.
-//
-// The ending resolves onto the OFFICIAL sp_ce logo file at public/<file>.
-// Until that file exists the render shows a labelled placeholder instead of
-// faking the logo with ordinary type.
-//
-// Once the SVG is supplied, tune `fit` so the logo lands exactly on the morphed
-// letterforms (check with `node scripts/stills.mjs 30.8 31.0 31.2`).
+// Signature-ending configuration, measured from the OFFICIAL logo file
+// public/brand/sp_ce-logo.svg (supplied as small.svg; white wordmark, viewBox 342 × 144).
+// The morph lands each letter on these glyph extents, then cross-fades onto the SVG itself.
 export const LOGO = {
   file: 'brand/sp_ce-logo.svg',
-  // tracking of the typeset target the letters settle into (em)
-  targetTrackingEm: -0.01,
-  // logo width relative to the typeset "sp_ce" ink width, plus px offsets
-  fit: {widthScale: 1.0, offsetX: 0, offsetY: 0},
-  // underscore bar, in em of the word size
-  underscore: {thicknessEm: 0.075, widthEm: 0.5},
+  viewW: 342,
+  viewH: 144,
+  baseline: 97.47, // bottom of s / c / e
+  xTop: 40.43, // top of the x-height (incl. overshoot)
+  // ink extents in logo units [left, right]
+  glyphs: {s: [24.0, 70.69], p: [81.76, 133.03], c: [207.75, 258.87], e: [264.47, 317.58]} as Record<string, [number, number]>,
+  underscore: {x0: 137.11, x1: 203.91, y0: 98.73, y1: 110.42},
 };

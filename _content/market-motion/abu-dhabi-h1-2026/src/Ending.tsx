@@ -9,18 +9,25 @@ import {ICE, INK, LegalLine, Mask, VIOLET} from './theme';
 import {T, W, clamp01, inOutCubic, lerp, seg} from './world';
 
 const FS = 200; // word size
-const WEIGHT = 500;
+const WEIGHT = 600; // closest Inter weight to the official wordmark
 const BASE_Y = 1000; // baseline of "space"
-const XH = 0.546; // Inter x-height (em)
 
-let advCache: Record<string, number> | null = null;
-function advances() {
-  if (advCache) return advCache;
+type Metrics = {adv: Record<string, number>; inkL: Record<string, number>; inkR: Record<string, number>; xh: number; sAsc: number; sDesc: number};
+let mCache: Metrics | null = null;
+function metrics(): Metrics {
+  if (mCache) return mCache;
   const ctx = document.createElement('canvas').getContext('2d')!;
   ctx.font = `${WEIGHT} ${FS}px Inter`;
-  advCache = {};
-  for (const ch of 'space_') advCache[ch] = ctx.measureText(ch).width;
-  return advCache;
+  const sM = ctx.measureText('s');
+  const m: Metrics = {adv: {}, inkL: {}, inkR: {}, xh: ctx.measureText('x').actualBoundingBoxAscent, sAsc: sM.actualBoundingBoxAscent, sDesc: sM.actualBoundingBoxDescent};
+  for (const ch of 'space') {
+    const r = ctx.measureText(ch);
+    m.adv[ch] = r.width;
+    m.inkL[ch] = -r.actualBoundingBoxLeft;
+    m.inkR[ch] = r.actualBoundingBoxRight;
+  }
+  mCache = m;
+  return m;
 }
 
 function layout(chars: string[], widths: number[], track: number) {
@@ -33,8 +40,15 @@ function layout(chars: string[], widths: number[], track: number) {
 
 export const Ending: React.FC<{t: number}> = ({t}) => {
   if (t < T.endIn) return null;
-  const A = advances();
+  const MT = metrics();
+  const A = MT.adv;
   const hasLogo = getStaticFiles().some((f) => f.name === LOGO.file);
+  // Logo placement: scale so its x-height equals the typeset x-height, baseline on BASE_Y.
+  // Match the full ink height of 's' (overshoot included on both sides).
+  const U = (MT.sAsc + MT.sDesc) / (LOGO.baseline - LOGO.xTop);
+  const logoW = LOGO.viewW * U;
+  const logoLeft = W / 2 - ((LOGO.glyphs.s[0] + LOGO.glyphs.e[1]) / 2) * U; // centre the ink, not the viewBox
+  const logoTop = BASE_Y - LOGO.baseline * U;
 
   const t0 = T.endIn;
   const M0 = t0 + 1.3; // morph start (after the hold)
@@ -44,24 +58,32 @@ export const Ending: React.FC<{t: number}> = ({t}) => {
   const logoIn = hasLogo ? inOutCubic(seg(t, M0 + 1.0, M0 + 1.3)) : 0;
 
   const word = ['s', 'p', 'a', 'c', 'e'];
-  const uW = LOGO.underscore.widthEm * FS;
-  const uH = LOGO.underscore.thicknessEm * FS;
+  const US = LOGO.underscore;
+  const uW = (US.x1 - US.x0) * U;
+  const uH = (US.y1 - US.y0) * U;
   const src = layout(word, word.map((c) => A[c]), -0.02 * FS);
   const str = layout(word, word.map((c) => A[c]), 0.16 * FS);
-  const tgt = layout(word, word.map((c) => (c === 'a' ? uW : A[c])), LOGO.targetTrackingEm * FS);
+  // Target: each glyph's ink box lands on the matching glyph of the official logo.
+  const tgtSx: number[] = [];
+  const tgtX = word.map((ch, i) => {
+    if (ch === 'a') { tgtSx.push(1); return logoLeft + US.x0 * U; }
+    const [l, r] = LOGO.glyphs[ch];
+    const sxi = ((r - l) * U) / (MT.inkR[ch] - MT.inkL[ch]);
+    tgtSx.push(sxi);
+    return logoLeft + l * U - MT.inkL[ch] * sxi;
+  });
+  const whiteK = seg(k2, 0.45, 1); // letters take on the logo's white as they settle
 
   const wordIn = seg(t, t0 + 0.3, t0 + 0.9);
   const eIn = 1 - Math.pow(1 - clamp01(wordIn), 4);
   const drift = 1 + 0.012 * seg(t, t0, t0 + 4);
   const sx = 1 + 0.07 * k1 * (1 - k2);
-  const flat = uH / (XH * FS);
+  const flat = uH / MT.xh;
   const aSy = lerp(1, flat, kA);
   const barP = seg(t, M0 + 0.5, M0 + 0.72);
   const gL = src.left, gR = src.left + src.total; // gradient spans the word
 
-  // ink box of the typeset target, for fitting the official SVG
-  const inkTop = BASE_Y - XH * FS, inkBot = BASE_Y + 0.2 * FS;
-  const logoW = tgt.total * LOGO.fit.widthScale;
+  const inkBot = BASE_Y + (120 - LOGO.baseline) * U;
 
   return (
     <div style={{position: 'absolute', inset: 0, transform: `scale(${drift})`, transformOrigin: `50% ${BASE_Y}px`}}>
@@ -72,7 +94,7 @@ export const Ending: React.FC<{t: number}> = ({t}) => {
         </Mask>
       </div>
 
-      <svg width={W} height={1920} style={{position: 'absolute', inset: 0, opacity: 1 - logoIn}}>
+      <svg width={W} height={1920} style={{position: 'absolute', inset: 0, opacity: 1 - seg(logoIn, 0.6, 1)}}>
         <defs>
           <linearGradient id="unicorn" gradientUnits="userSpaceOnUse" x1={gL} y1={0} x2={gR} y2={0}>
             <stop offset="0" stopColor={ICE} />
@@ -84,26 +106,30 @@ export const Ending: React.FC<{t: number}> = ({t}) => {
         </defs>
         <g clipPath="url(#wordReveal)" opacity={Math.min(1, eIn * 1.3)} transform={`translate(0, ${(1 - eIn) * 36})`}>
           {word.map((ch, i) => {
-            const x = lerp(lerp(src.xs[i], str.xs[i], k1), tgt.xs[i], k2);
+            const x = lerp(lerp(src.xs[i], str.xs[i], k1), tgtX[i], k2);
             if (ch !== 'a') {
+              const gsx = lerp(sx, tgtSx[i], k2);
+              const tr = `translate(${x.toFixed(2)}, ${(BASE_Y - MT.sDesc * k2).toFixed(2)}) scale(${gsx.toFixed(4)}, 1)`;
               return (
-                <text key={i} x={0} y={0} transform={`translate(${x.toFixed(2)}, ${BASE_Y}) scale(${sx.toFixed(4)}, 1)`}
-                  fontFamily="Inter" fontWeight={WEIGHT} fontSize={FS} fill="url(#unicorn)">
-                  {ch}
-                </text>
+                <g key={i}>
+                  <text x={0} y={0} transform={tr} fontFamily="Inter" fontWeight={WEIGHT} fontSize={FS} fill="url(#unicorn)">{ch}</text>
+                  {whiteK > 0 && <text x={0} y={0} transform={tr} fontFamily="Inter" fontWeight={WEIGHT} fontSize={FS} fill={INK} opacity={whiteK}>{ch}</text>}
+                </g>
               );
             }
             // the "a": compresses onto the baseline, then becomes a flat bar
             const aW = A.a;
             const aSx = sx * lerp(1, uW / aW, k2);
             const barW = lerp(aW * 0.86, uW, k2);
+            const barY = lerp(BASE_Y - uH, BASE_Y + (US.y0 - LOGO.baseline) * U, k2);
             return (
               <g key={i}>
                 <text x={0} y={0} opacity={1 - barP} transform={`translate(${x.toFixed(2)}, ${BASE_Y}) scale(${aSx.toFixed(4)}, ${aSy.toFixed(4)})`}
                   fontFamily="Inter" fontWeight={WEIGHT} fontSize={FS} fill="url(#unicorn)">
                   a
                 </text>
-                <rect x={x + (aW * aSx - barW) / 2 * (1 - k2)} y={BASE_Y - uH} width={barW} height={uH} opacity={barP} fill="url(#unicorn)" />
+                <rect x={x + (aW * aSx - barW) / 2 * (1 - k2)} y={barY} width={barW} height={uH} opacity={barP} fill="url(#unicorn)" />
+                <rect x={x + (aW * aSx - barW) / 2 * (1 - k2)} y={barY} width={barW} height={uH} opacity={barP * whiteK} fill={INK} />
               </g>
             );
           })}
@@ -115,8 +141,7 @@ export const Ending: React.FC<{t: number}> = ({t}) => {
         <Img
           src={staticFile(LOGO.file)}
           style={{
-            position: 'absolute', width: logoW, left: W / 2 - logoW / 2 + LOGO.fit.offsetX,
-            top: (inkTop + inkBot) / 2 + LOGO.fit.offsetY, transform: 'translateY(-50%)', opacity: logoIn,
+            position: 'absolute', width: logoW, height: LOGO.viewH * U, left: logoLeft, top: logoTop, opacity: logoIn,
           }}
         />
       )}

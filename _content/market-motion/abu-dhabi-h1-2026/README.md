@@ -74,12 +74,12 @@ The first draft (0–21 s) is the approved baseline and is unchanged apart from 
 - **Duration.** The film is now 32.4 s. The brief suggested about 20–24 s but also said not to rush the figures. Each
   new scene gets about 3.3 s and the ending about 4 s. Reaching 24 s would mean compressing the approved first draft.
 
-**The official logo is still needed.** The ending cross-fades onto `public/brand/sp_ce-logo.svg`. That file was not
-supplied, so the current render ends on the morphed letterforms with a visible PLACEHOLDER label, rather than
-imitating the logo with type. To finish it:
-1. Drop in the SVG.
-2. Tune `LOGO.fit` in `src/brand.ts` so the hand-off doesn't jump.
-3. Re-render.
+**Official logo.** The ending lands on `public/brand/sp_ce-logo.svg`, an unmodified copy of the supplied
+`small.svg` (white wordmark, viewBox 342 × 144). Its glyph extents are measured in `src/brand.ts`, and each letter
+of the morph lands on its matching logo glyph. The underscore bar lands on the logo's underscore rectangle. The logo is
+scaled so the ink height of its "s" matches the typeset "s", then it fades in over the letters in about 0.3 s. As the
+letters settle they shift from the gradient to the logo's white, so no colour jump shows at the handoff. The supplied
+"sp_ce | Real Estate" lockups remain in the repo root and are not used.
 
 ## Timeline
 
