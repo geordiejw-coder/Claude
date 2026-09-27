@@ -90,8 +90,9 @@
   },
   "legal": "The Prop Co Real Estate Space LLC OPC · Broker Licence No. 202400892044",
   "ending": {
-    "line1": "find your",
+    "line1": "Find your",
     "line2": "space",
-    "logo": "brand/sp_ce-logo.svg"
+    "stop": ".",
+    "tagline": "Find your space."
   }
 }

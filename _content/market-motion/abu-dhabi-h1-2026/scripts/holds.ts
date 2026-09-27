@@ -14,7 +14,7 @@ const spans = [
   ['H1 three-number summary', 20.6, T.recapOut],
   ['CBRE price momentum', T.priceIn + 1.45, T.priceOut - 0.55],
   ['Savills current pricing', T.rateIn + 1.25, T.rateOut - 0.55],
-  ['End card (find your space + official logo + licence)', T.endIn + 2.2, 1e9],
+  ['End card (Find your space. + licence)', T.endIn + 1.4, 1e9],
 ] as const;
 const out = spans.map(([name, a, b]) => ({name, seconds: +(film(b) - film(a)).toFixed(2)}));
 console.log(JSON.stringify({durationS: +(DURATION / FPS).toFixed(3), frames: DURATION, holds: out}));

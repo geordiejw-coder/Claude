@@ -1,6 +1,6 @@
 # sp_ce — Abu Dhabi City Residential Market, H1 2026 · market-motion film
 
-A code-rendered, vertical market-motion film for Instagram Reels (1080 × 1920, 30 fps, 47.2 s, H.264, no audio), built in Remotion.
+A code-rendered, vertical market-motion film for Instagram Reels (1080 × 1920, 30 fps, 46.4 s, H.264, no audio), built in Remotion.
 Every mark on screen is drawn from code: no image generation, stock footage or AI imagery.
 
 | Output | Path |
@@ -55,13 +55,12 @@ compare them with the reference itself.
 
 - **Scope caveat removed.** The line under 15,500 ("Abu Dhabi City residential unit sales; excludes residential
   complexes, duplexes and penthouses.") has been removed. The city scope note stays in the H1 summary footer.
-- **The ending no longer morphs.**
-  - "find your" appears in white, with "space" beneath it in an Ice Blue to Soft Violet gradient.
-  - The official `sp_ce` SVG then fades in above them (opacity only, 800 ms), followed by the licence line. It sits
-    at a proportional size (320 px visible width), on whole pixels, with no transform.
-  - The earlier stretch-and-snap into the logo is gone, so the final frame can't jump. This was checked frame by
-    frame in the exported MP4.
-  - The end card holds for 2.5 s once complete.
+- **End card: tagline only.** The final card shows the sp_ce tagline exactly as the brand spec sets it, followed by
+  the licence line, with no logo.
+  - **Wording:** "Find your space.", in sentence case with the full stop, on two lines. "Find your" and the full stop
+    are solid white; only "space" carries the Unicorn gradient (`gradient.unicorn`, 135°).
+  - **Type:** Inter 600, line-height 1.02, -0.025em, 88 px (`type.tagline-scale.reel-end-card`).
+  - **Hold:** 2.5 s once complete.
 
 ## sp_ce design-system pack: status for this job
 
@@ -88,7 +87,7 @@ as approved exceptions for this job.
 3. The licence line on every scene with a market claim.
 4. Safe area x 96–984, y 220–1600.
 5. The official `small.svg` (white) is used as the logo, rather than the pack's PNG.
-6. The ending: "find your" / "space" with the official logo fading in (no morph).
+6. (Resolved) The end card now follows the pack tagline spec, with no logo.
 7. The three-number summary, and two rates on one frame.
 8. Title in capitals.
 9. Source-line wording kept as approved.

@@ -339,7 +339,7 @@ export function annotationBox(t: number) {
 // Rather than re-cut the approved choreography, the whole world (camera, particles, text)
 // eases down to a slower speed across each hold window and back up again, so relative
 // timing is unchanged and motion never stops.
-export const WORLD_END = 40.3; // end card complete at T.endIn + 2.2 = 37.8 → 2.5 s hold (motion.duration-video-ms.end-card-hold)
+export const WORLD_END = 39.5; // end card complete at T.endIn + 1.4 = 37.0 → 2.5 s hold (motion.duration-video-ms.end-card-hold)
 const HOLD_FILM_S = 2.6;
 const HOLDS = [
   {w0: 7.6, w1: 8.15}, // 15,500 + label + y/y + scope caveat all fully in
