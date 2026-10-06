@@ -1,0 +1,168 @@
+{
+  "scene": {
+    "particles": 107277,
+    "nodes": 2193,
+    "edges": 5838
+  },
+  "network": [],
+  "copy": {
+    "title": {
+      "expected": "Abu Dhabi's AI bet is physical.",
+      "onScreen": "Abu Dhabi's AI bet is physical.",
+      "ok": true
+    },
+    "fig": {
+      "expected": "1GW",
+      "onScreen": "1GW",
+      "ok": true
+    },
+    "lab": {
+      "expected": "Stargate UAE cluster announced",
+      "onScreen": "Stargate UAE cluster announced",
+      "ok": true
+    },
+    "sup": {
+      "expected": "Abu Dhabi · Announced May 2025",
+      "onScreen": "Abu Dhabi · Announced May 2025",
+      "ok": true
+    },
+    "compute": {
+      "expected": "Compute needs infrastructure.",
+      "onScreen": "Compute needs infrastructure.",
+      "ok": true
+    },
+    "final": {
+      "expected": "Read the city's next economy.",
+      "onScreen": "Read the city's next economy.",
+      "ok": true
+    },
+    "src": {
+      "expected": "OpenAI · Introducing Stargate UAE · 22 May 2025",
+      "onScreen": "OpenAI · Introducing Stargate UAE · 22 May 2025",
+      "ok": true
+    },
+    "noOtherText": true,
+    "fontFamilies": [
+      "Inter"
+    ]
+  },
+  "readable": {
+    "title": [
+      {
+        "from": 1.1,
+        "to": 5.4,
+        "seconds": 4.3
+      }
+    ],
+    "fig": [
+      {
+        "from": 7.633333333333334,
+        "to": 13.4,
+        "seconds": 5.767
+      }
+    ],
+    "lab": [
+      {
+        "from": 6.866666666666666,
+        "to": 13.466666666666667,
+        "seconds": 6.6
+      }
+    ],
+    "sup": [
+      {
+        "from": 6.566666666666666,
+        "to": 13.566666666666666,
+        "seconds": 7
+      }
+    ],
+    "compute": [
+      {
+        "from": 15.2,
+        "to": 22.4,
+        "seconds": 7.2
+      }
+    ],
+    "final": [
+      {
+        "from": 23.666666666666668,
+        "to": 30,
+        "seconds": 6.333
+      }
+    ],
+    "src": [
+      {
+        "from": 6.6,
+        "to": 14.033333333333333,
+        "seconds": 7.433
+      }
+    ],
+    "gwState": {
+      "from": 7.633333333333334,
+      "to": 13.4,
+      "seconds": 5.767
+    }
+  },
+  "visible": {
+    "title": [
+      {
+        "from": 0.4666666666666667,
+        "to": 5.966666666666667
+      }
+    ],
+    "fig": [
+      {
+        "from": 7.3,
+        "to": 13.833333333333334
+      }
+    ],
+    "lab": [
+      {
+        "from": 6.466666666666667,
+        "to": 13.933333333333334
+      }
+    ],
+    "sup": [
+      {
+        "from": 6.166666666666667,
+        "to": 14.033333333333333
+      }
+    ],
+    "compute": [
+      {
+        "from": 14.566666666666666,
+        "to": 22.966666666666665
+      }
+    ],
+    "final": [
+      {
+        "from": 23.033333333333335,
+        "to": 30
+      }
+    ],
+    "src": [
+      {
+        "from": 6.166666666666667,
+        "to": 14.5
+      }
+    ]
+  },
+  "keepOut": {
+    "framesWithParticleInGlyph": []
+  },
+  "particles": {
+    "constantCount": true,
+    "count": 107277
+  },
+  "order": {
+    "mayLabelFirstVisible": 6.166666666666667,
+    "figureFirstVisible": 7.3,
+    "mayBeforeFigure": true
+  },
+  "finalFullyOnBy": 23.666666666666668,
+  "finalHoldsToEnd": true,
+  "sourceThroughFigureExit": {
+    "figureLastVisible": 13.8,
+    "sourceLastVisible": 14.466666666666667,
+    "ok": true
+  }
+}
