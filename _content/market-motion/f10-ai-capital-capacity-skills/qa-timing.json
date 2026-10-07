@@ -1,0 +1,223 @@
+{
+  "scene": {
+    "particles": 24000,
+    "fieldDots": 1000,
+    "fieldBlue": 950,
+    "particlesPerDot": 24
+  },
+  "network": [],
+  "copy": {
+    "title": {
+      "expected": [
+        "A future economy",
+        "needs more than",
+        "a headline."
+      ],
+      "onScreen": [
+        "A future economy",
+        "needs more than",
+        "a headline."
+      ],
+      "ok": true
+    },
+    "b1": {
+      "expected": [
+        "US$1.5bn",
+        "Microsoft investment in G42 announced",
+        "April 2024",
+        "Microsoft · 16 Apr 2024"
+      ],
+      "onScreen": [
+        "US$1.5bn",
+        "Microsoft investment in G42 announced",
+        "April 2024",
+        "Microsoft · 16 Apr 2024"
+      ],
+      "ok": true
+    },
+    "b2": {
+      "expected": [
+        "1GW",
+        "Stargate UAE cluster announced",
+        "Abu Dhabi · May 2025",
+        "OpenAI · 22 May 2025"
+      ],
+      "onScreen": [
+        "1GW",
+        "Stargate UAE cluster announced",
+        "Abu Dhabi · May 2025",
+        "OpenAI · 22 May 2025"
+      ],
+      "ok": true
+    },
+    "b3": {
+      "expected": [
+        "95%",
+        "Public-sector employees",
+        "completed AI training",
+        "Abu Dhabi · 2025",
+        "Abu Dhabi DGE · 2025 review · 8 Jan 2026"
+      ],
+      "onScreen": [
+        "95%",
+        "Public-sector employees",
+        "completed AI training",
+        "Abu Dhabi · 2025",
+        "Abu Dhabi DGE · 2025 review · 8 Jan 2026"
+      ],
+      "ok": true
+    },
+    "ov": {
+      "expected": [
+        "US$1.5bn",
+        "Investment.",
+        "Microsoft · 16 Apr 2024",
+        "1GW",
+        "Planned computing capacity.",
+        "OpenAI · 22 May 2025",
+        "95%",
+        "Skills already developed.",
+        "Abu Dhabi DGE · 2025 review · 8 Jan 2026"
+      ],
+      "onScreen": [
+        "US$1.5bn",
+        "Investment.",
+        "Microsoft · 16 Apr 2024",
+        "1GW",
+        "Planned computing capacity.",
+        "OpenAI · 22 May 2025",
+        "95%",
+        "Skills already developed.",
+        "Abu Dhabi DGE · 2025 review · 8 Jan 2026"
+      ],
+      "ok": true
+    },
+    "final": {
+      "expected": [
+        "Look at the",
+        "foundations of the",
+        "next economy."
+      ],
+      "onScreen": [
+        "Look at the",
+        "foundations of the",
+        "next economy."
+      ],
+      "ok": true
+    },
+    "noOtherText": true,
+    "fonts": [
+      "Inter"
+    ],
+    "overviewFigureSizes": [
+      "150px",
+      "150px",
+      "150px"
+    ]
+  },
+  "readable": {
+    "title": [
+      {
+        "from": 0.367,
+        "to": 3.033,
+        "seconds": 2.667
+      }
+    ],
+    "b1": [
+      {
+        "from": 3.933,
+        "to": 6.633,
+        "seconds": 2.7
+      }
+    ],
+    "b2": [
+      {
+        "from": 7.933,
+        "to": 10.633,
+        "seconds": 2.7
+      }
+    ],
+    "b3": [
+      {
+        "from": 12.1,
+        "to": 14.7,
+        "seconds": 2.6
+      }
+    ],
+    "ov": [
+      {
+        "from": 16.433,
+        "to": 24.533,
+        "seconds": 8.1
+      }
+    ],
+    "final": [
+      {
+        "from": 26,
+        "to": 30,
+        "seconds": 4
+      }
+    ]
+  },
+  "checks": {
+    "dataHolds": {
+      "b1": 2.7,
+      "b2": 2.7,
+      "b3": 2.6,
+      "ok": true
+    },
+    "overviewHold": {
+      "seconds": 8.1,
+      "ok": true
+    },
+    "titleHold": 2.667,
+    "final": {
+      "fullyOnAt": 26,
+      "holdsToEnd": true
+    },
+    "windows": {
+      "b1": [
+        [
+          3.933,
+          6.633
+        ]
+      ],
+      "b2": [
+        [
+          7.933,
+          10.633
+        ]
+      ],
+      "b3": [
+        [
+          12.1,
+          14.7
+        ]
+      ],
+      "ov": [
+        [
+          16.433,
+          24.533
+        ]
+      ]
+    },
+    "sourcesWhileFigures": {
+      "violations": [],
+      "ok": true
+    },
+    "splitBeforeNumber": {
+      "first95Frame": 11.766666666666667,
+      "blueDots": 950,
+      "whiteDots": 50,
+      "ok": true
+    },
+    "fieldDuringHold": true,
+    "keepOut": {
+      "framesWithParticleInGlyph": 0
+    },
+    "particles": {
+      "constant": true,
+      "count": 24000
+    }
+  }
+}

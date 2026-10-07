@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080, height=1920">
+<title>F10 Capital Capacity Skills</title>
+<!--
+  F10 (Revision 3) — Abu Dhabi's AI bet: capital, capacity, skills. sp_ce market-motion film, 30 s, 1080 × 1920.
+  One scene. renderAt(t) is a pure function of film time t: particle positions, text states and the camera are
+  computed from t and seeded constants only. Brand and layout: _content/market-motion/MARKET-MOTION-PRODUCTION-SPEC.md.
+  The three figures are different measures. Nothing in the picture scales with their values.
+-->
+<style>
+  @font-face { font-family: "Inter"; src: url("assets/Inter-VariableFont_slnt_wght.ttf") format("truetype"); font-weight: 100 900; }
+  :root { --black: #000000; --ink: #FFFFFF; --cloud: #E4E8EF; --mist: #8B95A7; --ice: #AABCFF; }
+  html, body { margin: 0; padding: 0; background: var(--black); }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--black);
+           font-family: "Inter"; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  #stage canvas, .layer { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+  #vignette { background: radial-gradient(140% 90% at 50% 45%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.85) 100%); }
+  #grain { mix-blend-mode: overlay; opacity: 0.055; }
+  #logo { position: absolute; }
+  #text { position: absolute; inset: 0; }
+  .block { position: absolute; left: 96px; width: 888px; visibility: hidden; }
+  .mask { overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
+  .title { font-size: 84px; letter-spacing: -0.03em; line-height: 1.02; white-space: nowrap; }
+  .t800 { font-weight: 800; } .t600 { font-weight: 600; }
+  .hero { font-size: 224px; font-weight: 700; line-height: 1; letter-spacing: -0.035em; color: var(--ice); white-space: nowrap; }
+  .hero.cur { font-size: 206px; }                                      /* spec: hero with currency prefix */
+  .pre { font-size: 0.40em; font-weight: 600; letter-spacing: 0; margin-right: 0.12em; }
+  .suf { font-size: 0.40em; font-weight: 600; letter-spacing: 0; margin-left: 0.06em; }
+  .unit { font-size: 0.62em; font-weight: 600; letter-spacing: -0.02em; margin-left: 0.04em; }
+  .pct { font-size: 0.62em; font-weight: 600; letter-spacing: 0; margin-left: 0.02em; }
+  .label { font-size: 46px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.12; color: var(--ink); white-space: nowrap; }
+  .support { font-size: 34px; font-weight: 600; color: var(--cloud); white-space: nowrap; }
+  .source { font-size: 22px; font-weight: 400; color: var(--mist); line-height: 1.4; white-space: nowrap; }
+  .sum { font-size: 150px; font-weight: 700; line-height: 1; letter-spacing: -0.035em; color: var(--ice); white-space: nowrap; }
+  .rowlab { font-size: 34px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .ink { display: inline-block; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="fx" width="1080" height="1920"></canvas>
+  <div id="vignette" class="layer"></div>
+  <img id="logo" src="assets/sp_ce-logo.svg" alt="">
+  <div id="text">
+    <!-- 0–3 s -->
+    <div class="block" id="title" style="top:500px" data-copy-block="A future economy needs more than a headline.">
+      <div class="mask"><div><span class="ink title t800">A future economy</span></div></div>
+      <div class="mask" style="margin-top:10px"><div><span class="ink title t600">needs more than</span></div></div>
+      <div class="mask" style="margin-top:10px"><div><span class="ink title t600">a headline.</span></div></div>
+    </div>
+
+    <!-- 3–7 s: hero 520 / label 778 / supporting below (spec §1) -->
+    <div class="block beat" id="b1" style="top:0">
+      <div class="fig" style="position:absolute; left:-4px; top:532px"><span class="ink hero cur"><span class="pre">US$</span>1.5<span class="suf">bn</span></span></div>
+      <div style="position:absolute; left:0; top:778px">
+        <div class="mask"><div><span class="ink label">Microsoft investment in G42 announced</span></div></div>
+        <div class="mask" style="margin-top:14px"><div><span class="ink support">April 2024</span></div></div>
+      </div>
+      <div class="src" style="position:absolute; left:0; top:1558px; transform:translateY(-100%)"><span class="ink source">Microsoft · 16 Apr 2024</span></div>
+    </div>
+
+    <!-- 7–11 s -->
+    <div class="block beat" id="b2" style="top:0">
+      <div class="fig" style="position:absolute; left:-6px; top:520px"><span class="ink hero">1<span class="unit">GW</span></span></div>
+      <div style="position:absolute; left:0; top:778px">
+        <div class="mask"><div><span class="ink label">Stargate UAE cluster announced</span></div></div>
+        <div class="mask" style="margin-top:14px"><div><span class="ink support">Abu Dhabi · May 2025</span></div></div>
+      </div>
+      <div class="src" style="position:absolute; left:0; top:1558px; transform:translateY(-100%)"><span class="ink source">OpenAI · 22 May 2025</span></div>
+    </div>
+
+    <!-- 11–15 s: label wraps to two lines (single line is 1,022 px at 46 px, wider than the 888 px column) -->
+    <div class="block beat" id="b3" style="top:0">
+      <div class="fig" style="position:absolute; left:-6px; top:500px"><span class="ink hero">95<span class="pct">%</span></span></div>
+      <div style="position:absolute; left:0; top:752px">
+        <div class="mask"><div><span class="ink label">Public-sector employees</span></div></div>
+        <div class="mask"><div><span class="ink label">completed AI training</span></div></div>
+        <div class="mask" style="margin-top:14px"><div><span class="ink support">Abu Dhabi · 2025</span></div></div>
+      </div>
+      <div class="src" style="position:absolute; left:0; top:1558px; transform:translateY(-100%)"><span class="ink source">Abu Dhabi DGE · 2025 review · 8 Jan 2026</span></div>
+    </div>
+
+    <!-- 15–25 s: overview. Three equal rows, same figure size, no bars: different measures, not compared. -->
+    <div class="block" id="ov" style="top:0">
+      <div class="row" style="position:absolute; left:0; top:430px">
+        <div class="fig"><span class="ink sum"><span class="pre">US$</span>1.5<span class="suf">bn</span></span></div>
+        <div class="mask" style="margin-top:12px"><div><span class="ink rowlab">Investment.</span></div></div>
+        <div class="mask" style="margin-top:6px"><div><span class="ink source">Microsoft · 16 Apr 2024</span></div></div>
+      </div>
+      <div class="row" style="position:absolute; left:0; top:690px">
+        <div class="fig"><span class="ink sum">1<span class="unit">GW</span></span></div>
+        <div class="mask" style="margin-top:12px"><div><span class="ink rowlab">Planned computing capacity.</span></div></div>
+        <div class="mask" style="margin-top:6px"><div><span class="ink source">OpenAI · 22 May 2025</span></div></div>
+      </div>
+      <div class="row" style="position:absolute; left:0; top:950px">
+        <div class="fig"><span class="ink sum">95<span class="pct">%</span></span></div>
+        <div class="mask" style="margin-top:12px"><div><span class="ink rowlab">Skills already developed.</span></div></div>
+        <div class="mask" style="margin-top:6px"><div><span class="ink source">Abu Dhabi DGE · 2025 review · 8 Jan 2026</span></div></div>
+      </div>
+    </div>
+
+    <!-- 25–30 s -->
+    <div class="block" id="final" style="top:500px">
+      <div class="mask"><div><span class="ink title t800">Look at the</span></div></div>
+      <div class="mask" style="margin-top:10px"><div><span class="ink title t600">foundations of the</span></div></div>
+      <div class="mask" style="margin-top:10px"><div><span class="ink title t600">next economy.</span></div></div>
+    </div>
+  </div>
+  <canvas id="grain" width="1080" height="1920"></canvas>
+</div>
+
+<script>
+'use strict';
+const W = 1080, H = 1920, FPS = 30, DURATION = 30;
+const FOCAL = 1020, PP = {x: 540, y: 1060};
+const clamp01 = x => x < 0 ? 0 : x > 1 ? 1 : x;
+const seg = (t, a, b) => clamp01((t - a) / (b - a));
+const smooth = x => x * x * (3 - 2 * x);
+const inOutCubic = x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const outExpo = x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x);
+const lerp = (a, b, k) => a + (b - a) * k;
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gauss(r) { let u = 0; while (u === 0) u = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * r()); }
+
+// ------------------------------------------------------------------ timeline (film seconds)
+// Mask lines: 0.6 s outExpo in (title 0.45 s to fit its 3 s window), 0.5 s inOutCubic out. Figures appear whole:
+// opacity 0 → 1 with a 16 px rise. Sources fade in with their labels and leave after their figure.
+const T = {
+  title:  {in: 0.0, stagger: 0.04, len: 0.38, out: 3.0, outLen: 0.4},          // readable ≈ 0.46 → 3.0
+  beats: [
+    {id: 'b1', lab: 3.05, fig: [3.55, 3.95], out: 6.6},                        // readable 3.95 → 6.6
+    {id: 'b2', lab: 7.05, fig: [7.6, 7.95], out: 10.6},                        // readable 7.95 → 10.6
+    {id: 'b3', lab: 11.05, fig: [11.75, 12.1], out: 14.65},                    // split resolved 11.7; readable 12.1 → 14.65
+  ],
+  ov:     {in: 15.55, stagger: 0.25, out: 24.5},                               // label + source lead each figure by 0.35 s; readable ≈ 16.9 → 24.5
+  final:  {in: 25.3, stagger: 0.12, len: 0.6},                                 // fully on ≈ 26.15, holds to 30
+  split:  [11.15, 11.7],                                                       // 95 % tint wave, done before the figure
+};
+// state transitions of the one particle system: [start, stagger spread, min dur, max dur]
+const TR = [
+  [0.5, 1.6, 0.8, 1.1],     // 0 cloud → 1 connected structure      (done by 3.2, before US$1.5bn)
+  [6.55, 0.35, 0.6, 0.7],   // 1 → 2 compute-like lattice            (done by 7.6, before 1GW)
+  [10.5, 0.2, 0.75, 0.9],   // 2 → 3 full share field                (done by 11.6; split by 11.7, 95% at 11.75)
+  [14.7, 0.6, 0.8, 1.0],    // 3 → 4 quiet band under the overview
+  [24.6, 0.9, 1.0, 1.3],    // 4 → 5 one closing relationship: the foundation
+];
+const HOLDS = [[0.5, 3.0], [4.0, 6.6], [8.0, 10.6], [12.1, 14.6], [16.9, 24.5], [26.2, 30.5]];
+function speedAt(t) { let s = 1; for (const [a, b] of HOLDS) { const k = smooth(seg(t, a - 0.35, a)) * (1 - smooth(seg(t, b, b + 0.35))); s = Math.min(s, 1 - 0.6 * k); } return s; }
+const WT_STEP = 1 / 240, WT = new Float64Array(Math.ceil(31 / WT_STEP) + 2);
+for (let i = 1; i < WT.length; i++) WT[i] = WT[i - 1] + speedAt((i - 0.5) * WT_STEP) * WT_STEP;
+function worldTime(t) { const x = Math.max(0, t) / WT_STEP, i = Math.min(WT.length - 2, Math.floor(x)); return lerp(WT[i], WT[i + 1], x - i); }
+
+// ------------------------------------------------------------------ camera: one slow continuous move
+const CAM = {p0: [-0.8, 0.3, -1.5], p1: [0.3, 0.5, 0.5], p2: [1.6, 1.5, 1.8], t0: [0.0, -2.2, 20.0], t1: [-0.6, -3.6, 20.0]};
+function camera(t) {
+  const u = clamp01(t / DURATION), a = (1 - u) * (1 - u), b = 2 * u * (1 - u), c = u * u;
+  const p = [0, 1, 2].map(i => a * CAM.p0[i] + b * CAM.p1[i] + c * CAM.p2[i]);
+  p[0] += 0.012 * Math.sin(t * 0.83); p[1] += 0.012 * Math.sin(t * 0.61 + 1.3);
+  const tg = [0, 1, 2].map(i => lerp(CAM.t0[i], CAM.t1[i], smooth(u)));
+  let f = [tg[0] - p[0], tg[1] - p[1], tg[2] - p[2]]; const fl = Math.hypot(...f); f = f.map(v => v / fl);
+  let r = [f[2], 0, -f[0]]; const rl = Math.hypot(...r); r = r.map(v => v / rl);
+  const up = [f[1] * r[2] - f[2] * r[1], f[2] * r[0] - f[0] * r[2], f[0] * r[1] - f[1] * r[0]];
+  const roll = (0.5 * Math.PI / 180) * Math.sin(u * Math.PI * 1.3), cr = Math.cos(roll), sr = Math.sin(roll);
+  return {p, f, r: r.map((v, i) => cr * v + sr * up[i]), u: up.map((v, i) => cr * v - sr * r[i]), yaw: Math.atan2(f[0], f[2]), roll};
+}
+function project(cam, x, y, z, out) {
+  const dx = x - cam.p[0], dy = y - cam.p[1], dz = z - cam.p[2];
+  const zc = dx * cam.f[0] + dy * cam.f[1] + dz * cam.f[2];
+  out[0] = PP.x + FOCAL * (dx * cam.r[0] + dy * cam.r[1] + dz * cam.r[2]) / zc;
+  out[1] = PP.y - FOCAL * (dx * cam.u[0] + dy * cam.u[1] + dz * cam.u[2]) / zc;
+  out[2] = zc; return out;
+}
+// screen point at camera depth D → world point (used to place each state where the layout needs it)
+function unproject(cam, sx, sy, D) {
+  const a = (sx - PP.x) / FOCAL * D, b = (PP.y - sy) / FOCAL * D;
+  return [0, 1, 2].map(i => cam.p[i] + cam.f[i] * D + cam.r[i] * a + cam.u[i] * b);
+}
+
+// ------------------------------------------------------------------ states (slots), seeded once
+const N = 24000;
+const rand = mulberry32(0xF10C3);
+function linePoints(segs, n, out) {  // distribute n points along segments by length
+  const L = segs.map(([a, b]) => Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2])), tot = L.reduce((s, v) => s + v, 0);
+  let k = 0;
+  segs.forEach(([a, b], i) => {
+    const m = i === segs.length - 1 ? n - k : Math.round(n * L[i] / tot);
+    for (let j = 0; j < m && k < n; j++, k++) { const f = (j + 0.5) / m; out.push([lerp(a[0], b[0], f), lerp(a[1], b[1], f), lerp(a[2], b[2], f)]); }
+  });
+  while (out.length < n) out.push(segs[0][0].slice());
+}
+const S = [];
+// 0 — dense cloud below eye level
+{
+  const c = unproject(camera(0), 540, 1250, 17), s = [];
+  for (let i = 0; i < N; i++) s.push([c[0] + gauss(rand) * 2.6, c[1] + gauss(rand) * 1.2, c[2] + gauss(rand) * 2.0]);
+  S.push({pts: s});
+}
+// 1 — connected structure: hubs linked to their nearest neighbours, material on the links
+{
+  const c = unproject(camera(5), 540, 1240, 18), hubs = [];
+  while (hubs.length < 46) {
+    const x = rand() * 2 - 1, y = rand() * 2 - 1, z = rand() * 2 - 1;
+    if (x * x + y * y + z * z > 1) continue;
+    hubs.push([c[0] + x * 8.5, c[1] + y * 3.0, c[2] + z * 5.0]);
+  }
+  const segs = [], seen = new Set();
+  hubs.forEach((h, i) => {
+    hubs.map((g, j) => [j, Math.hypot(g[0] - h[0], g[1] - h[1], g[2] - h[2])]).filter(([j]) => j !== i)
+      .sort((a, b) => a[1] - b[1]).slice(0, 3).forEach(([j]) => {
+        const key = Math.min(i, j) + '-' + Math.max(i, j);
+        if (!seen.has(key)) { seen.add(key); segs.push([h, hubs[j]]); }
+      });
+  });
+  const s = [];
+  const nh = Math.round(N * 0.18);
+  for (let i = 0; i < nh; i++) { const h = hubs[i % hubs.length]; s.push([h[0] + gauss(rand) * 0.09, h[1] + gauss(rand) * 0.09, h[2] + gauss(rand) * 0.09]); }
+  linePoints(segs, N - nh, s);
+  S.push({pts: s});
+}
+// 2 — compute-like lattice: a regular 9 × 4 × 5 frame, turned and tilted so it reads in three dimensions
+{
+  const c = unproject(camera(9), 540, 1250, 19.5), sp = 1.9, yaw = 28 * Math.PI / 180, tilt = 12 * Math.PI / 180;
+  const node = (i, j, k) => {
+    const x = (i - 4) * sp, y = (j - 1.5) * sp, z = (k - 2) * sp;
+    const y1 = y * Math.cos(tilt) - z * Math.sin(tilt), z1 = y * Math.sin(tilt) + z * Math.cos(tilt);
+    return [c[0] + x * Math.cos(yaw) + z1 * Math.sin(yaw), c[1] + y1, c[2] - x * Math.sin(yaw) + z1 * Math.cos(yaw)];
+  };
+  const segs = [], nodes = [];
+  for (let i = 0; i < 9; i++) for (let j = 0; j < 4; j++) for (let k = 0; k < 5; k++) {
+    nodes.push(node(i, j, k));
+    if (i < 8) segs.push([node(i, j, k), node(i + 1, j, k)]);
+    if (j < 3) segs.push([node(i, j, k), node(i, j + 1, k)]);
+    if (k < 4) segs.push([node(i, j, k), node(i, j, k + 1)]);
+  }
+  const s = [];
+  const nn = nodes.length * 8;
+  for (let i = 0; i < nn; i++) { const q = nodes[i % nodes.length]; s.push([q[0] + gauss(rand) * 0.04, q[1] + gauss(rand) * 0.04, q[2] + gauss(rand) * 0.04]); }
+  linePoints(segs, N - nn, s);
+  S.push({pts: s});
+}
+// 3 — full share field: 40 × 25 = 1,000 equal dots facing the camera; the last 50 in reading order are the 5 %
+const FIELD = {cols: 40, rows: 25, x0: 107, dx: 22, y0: 1040, dy: 18, depth: 16, per: N / 1000};
+{
+  const cam = camera(13), s = [], blue = [];
+  for (let d = 0; d < 1000; d++) {
+    const col = d % FIELD.cols, row = Math.floor(d / FIELD.cols);
+    const w = unproject(cam, FIELD.x0 + col * FIELD.dx, FIELD.y0 + row * FIELD.dy, FIELD.depth);
+    for (let k = 0; k < FIELD.per; k++) { s.push(w); blue.push(d < 950 ? 1 : 0); }
+  }
+  S.push({pts: s, blue, dotOf: s.map((_, i) => Math.floor(i / FIELD.per))});
+}
+// 4 — quiet band under the overview rows
+{
+  const cam = camera(20), s = [];
+  for (let i = 0; i < N; i++) s.push(unproject(cam, 60 + rand() * 960, 1300 + rand() * 120, 13 + rand() * 12));
+  S.push({pts: s});
+}
+// 5 — one closing relationship: a single connected foundation grid under the last line
+{
+  const cam = camera(28), segs = [];
+  const yF = cam.p[1] - 5.2;
+  for (let z = 8; z <= 40; z += 2.4) segs.push([[-18, yF, z], [18, yF, z]]);
+  for (let x = -18; x <= 18; x += 2.4) segs.push([[x, yF, 8], [x, yF, 40]]);
+  const s = []; linePoints(segs, N, s);
+  S.push({pts: s});
+}
+// Slot assignment: sort each state's slots into 40 screen-x bands, by y within a band, and give slot i to
+// particle i in every state, so each particle keeps a coherent place and moves locally between states.
+{
+  const cam = camera(8), tmp = [0, 0, 0];
+  for (const st of S) {
+    const idx = st.pts.map((p, i) => { project(cam, p[0], p[1], p[2], tmp); return [i, Math.floor(clamp01(tmp[0] / W) * 39.999) * 1e5 + clamp01(tmp[1] / H) * 9e4]; }).sort((a, b) => a[1] - b[1]).map(a => a[0]);
+    st.pts = idx.map(i => st.pts[i]);
+    if (st.blue) { st.blue = idx.map(i => st.blue[i]); st.dotOf = idx.map(i => st.dotOf[i]); }
+  }
+}
+// per-particle seeded parameters
+const PS = {ph: new Float32Array(N), bright: new Float32Array(N), t0: [], dur: []};
+for (let i = 0; i < N; i++) { PS.ph[i] = rand() * Math.PI * 2; PS.bright[i] = 0.6 + 0.4 * Math.pow(rand(), 1.8); }
+const tmpX = [0, 0, 0];
+for (let k = 0; k < TR.length; k++) {
+  const [a, spread, d0, d1] = TR[k], t0 = new Float32Array(N), du = new Float32Array(N), st = S[k + 1];
+  for (let i = 0; i < N; i++) {
+    project(camera(a), st.pts[i][0], st.pts[i][1], st.pts[i][2], tmpX);
+    t0[i] = a + spread * (0.55 * clamp01(tmpX[0] / W) + 0.45 * rand());
+    du[i] = lerp(d0, d1, rand());
+  }
+  PS.t0.push(t0); PS.dur.push(du);
+}
+// split wave: each 95 % dot turns Ice Blue in reading order across T.split
+function splitAt(i, t) { const d = S[3].dotOf[i]; const s = T.split[0] + (T.split[1] - T.split[0] - 0.2) * (d / 1000); return smooth(seg(t, s, s + 0.2)); }
+
+// settled position of particle i in state k at world time wt (small breathing; the field and the cloud differ)
+function statePos(k, i, wt, out) {
+  const p = S[k].pts[i], ph = PS.ph[i];
+  if (k === 0) { out[0] = p[0] + 0.3 * Math.sin(wt * 0.31 + ph) + 0.08 * wt; out[1] = p[1] + 0.22 * Math.sin(wt * 0.27 + ph * 1.7); out[2] = p[2] + 0.3 * Math.sin(wt * 0.23 + ph * 2.3); return; }
+  const b = k === 3 ? 0 : k === 4 ? 0.12 : 0.02;
+  out[0] = p[0] + b * Math.sin(wt * 0.9 + ph); out[1] = p[1] + b * Math.sin(wt * 0.77 + ph * 1.3); out[2] = p[2];
+}
+// position + state weights for particle i at time t
+const POS = [0, 0, 0], _A = [0, 0, 0], _B = [0, 0, 0];
+let _from = 0, _to = 0, _e = 0, _landAge = 9;
+function particleAt(i, t, wt) {
+  let k = 0;
+  while (k < TR.length && t >= PS.t0[k][i]) k++;
+  // k transitions have started; the last one (k-1) may be in progress
+  if (k === 0) { statePos(0, i, wt, POS); _from = _to = 0; _e = 1; _landAge = 9; return; }
+  const j = k - 1, u = seg(t, PS.t0[j][i], PS.t0[j][i] + PS.dur[j][i]);
+  _from = j; _to = j + 1; _e = inOutCubic(u); _landAge = t - (PS.t0[j][i] + PS.dur[j][i]);
+  statePos(_to, i, wt, _B);
+  if (u >= 1) { POS[0] = _B[0]; POS[1] = _B[1]; POS[2] = _B[2]; return; }
+  statePos(_from, i, wt, _A);
+  const lift = (_to === 3 || _from === 3 ? 0 : 0.4) * Math.sin(Math.PI * _e);   // no arc into or out of the flat field
+  POS[0] = lerp(_A[0], _B[0], _e); POS[1] = lerp(_A[1], _B[1], _e) + lift; POS[2] = lerp(_A[2], _B[2], _e);
+}
+// per particle, by state. Coincident particles in one stroke bucket paint once, so a field dot (24 stacked
+// particles) takes its full alpha from a single particle.
+const ALPHA = [0.2, 0.4, 0.45, 0.85, 0.08, 0.3];
+
+// ------------------------------------------------------------------ text
+const $ = id => document.getElementById(id);
+// hidden blocks are taken out of layout entirely
+function setShown(el, on) { el.style.visibility = on ? 'visible' : 'hidden'; el.style.display = on ? '' : 'none'; }
+function setMask(el, inP, outP) {
+  const a = outExpo(clamp01(inP)), b = inOutCubic(clamp01(outP || 0)), inner = el.firstElementChild;
+  // whole-pixel offsets keep the clip edge crisp
+  inner.style.transform = `translateY(${Math.round(((1 - a) * 105 - b * 105) / 100 * inner._h)}px)`;
+  const o = Math.min(1, a * 1.4) * (1 - b); inner.style.opacity = o.toFixed(4); inner.style.visibility = o > 0 ? 'visible' : 'hidden'; return o;
+}
+function setFig(el, tin, tout, t) {
+  const e = inOutCubic(seg(t, tin[0], tin[1])), o = e * (1 - inOutCubic(seg(t, tout, tout + 0.5)));
+  el.style.opacity = o.toFixed(4); el.style.transform = `translateY(${(16 * (1 - e)).toFixed(2)}px)`; return o;
+}
+function linesBlock(id, spec, t) {
+  let v = 0;
+  $(id).querySelectorAll(':scope > .mask').forEach((m, i) => {
+    const s = spec.in + i * spec.stagger;
+    v = Math.max(v, setMask(m, seg(t, s, s + spec.len), spec.out ? seg(t, spec.out + i * 0.05, spec.out + i * 0.05 + spec.outLen) : 0));
+  });
+  setShown($(id), v > 0); return v;
+}
+function beat(b, t) {
+  const el = $(b.id); let v = 0;
+  el.querySelectorAll('.mask').forEach((m, i) => { v = Math.max(v, setMask(m, seg(t, b.lab + i * 0.12, b.lab + i * 0.12 + 0.6), seg(t, b.out + 0.05 + i * 0.05, b.out + 0.55 + i * 0.05))); });
+  v = Math.max(v, setFig(el.querySelector('.fig'), b.fig, b.out, t));
+  // source: on with the labels, off only after the figure has gone
+  // in after the previous source has gone (b.lab + 0.3), out once the figure has fully exited (b.out + 0.5)
+  const so = smooth(seg(t, b.lab + 0.3, b.lab + 0.6)) * (1 - smooth(seg(t, b.out + 0.5, b.out + 0.75)));
+  el.querySelector('.src').style.opacity = so.toFixed(4);
+  v = Math.max(v, so);
+  setShown(el, v > 0); return v;
+}
+function overview(t) {
+  const el = $('ov'); let v = 0;
+  el.querySelectorAll('.row').forEach((row, r) => {
+    const s = T.ov.in + r * T.ov.stagger;
+    v = Math.max(v, setFig(row.querySelector('.fig'), [s, s + 0.4], T.ov.out, t));
+    // label and source arrive before the figure and leave after it, so a figure is never on screen without its source
+    row.querySelectorAll('.mask').forEach((m, i) => { const a = s - 0.35 + i * 0.12, o = T.ov.out + 0.5 + i * 0.05; v = Math.max(v, setMask(m, seg(t, a, a + 0.6), seg(t, o, o + 0.45))); });
+  });
+  setShown(el, v > 0); return v;
+}
+// logo: official SVG, ink width 113 px, ink top-left at (96, 226)
+const LOGO = {viewW: 342, viewH: 144, inkL: 24.0, inkR: 317.58, xTop: 40.43};
+{ const u = 113 / (LOGO.inkR - LOGO.inkL), el = $('logo');
+  el.style.width = (LOGO.viewW * u) + 'px'; el.style.height = (LOGO.viewH * u) + 'px';
+  el.style.left = (96 - LOGO.inkL * u) + 'px'; el.style.top = (226 - LOGO.xTop * u) + 'px'; }
+
+// ------------------------------------------------------------------ drawing
+const fx = $('fx'), ctx = fx.getContext('2d');
+const bloom = document.createElement('canvas'); bloom.width = W / 4; bloom.height = H / 4; const bctx = bloom.getContext('2d');
+const layer = document.createElement('canvas'); layer.width = W; layer.height = H; const lctx = layer.getContext('2d');
+const A_LEVELS = [0.03, 0.05, 0.08, 0.13, 0.2, 0.3, 0.45, 0.62, 0.85];
+const S_LEVELS = [1.0, 1.4, 2.0, 2.8, 3.8, 5.2];
+const COLORS = ['#ffffff', '#AABCFF'];
+const NB = A_LEVELS.length * S_LEVELS.length;
+const paths = new Array(NB * 2);
+function nearestIdx(levels, v) { let bi = 0, bd = 1e9; for (let i = 0; i < levels.length; i++) { const d = Math.abs(levels[i] - v); if (d < bd) { bd = d; bi = i; } } return bi; }
+const grainTiles = [];
+{ const g = mulberry32(0x6A1);
+  for (let n = 0; n < 4; n++) { const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d'), img = x.createImageData(256, 256);
+    for (let i = 0; i < img.data.length; i += 4) { const v = Math.floor(g() * 255); img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
+    x.putImageData(img, 0, 0); grainTiles.push(c); } }
+const gctx = $('grain').getContext('2d');
+const KEEP_PAD = 18, KEEP_FADE = 40;
+function keepOut(rects, x, y) {
+  let m = 1;
+  for (const r of rects) {
+    const d = Math.hypot(Math.max(r.x0 - x, 0, x - r.x1), Math.max(r.y0 - y, 0, y - r.y1));
+    const k = 1 - r.v * (1 - smooth(clamp01((d - KEEP_PAD) / KEEP_FADE)));
+    if (k < m) m = k;
+  }
+  return m;
+}
+const SHUTTER = 0.55 / FPS;
+const stats = {};
+window.renderAt = function renderAt(t) {
+  t = Math.max(0, Math.min(DURATION, t));
+  const wt = worldTime(t), speed = speedAt(t), cam = camera(t);
+  const tp = t - SHUTTER * speed, camPrev = camera(tp), wtPrev = worldTime(tp);
+
+  // ---------------- text
+  $('logo').style.opacity = smooth(seg(t, 0.1, 0.8)).toFixed(4);
+  const vis = {title: linesBlock('title', T.title, t)};
+  T.beats.forEach(b => { vis[b.id] = beat(b, t); });
+  vis.ov = overview(t);
+  vis.final = linesBlock('final', T.final, t);
+  const parX = Math.max(-10, Math.min(10, -Math.sin(cam.yaw) * 65)), parY = Math.sin(cam.roll) * 60;
+  $('text').style.transform = `translate(${parX.toFixed(2)}px, ${parY.toFixed(2)}px)`;
+  const rects = [{x0: 96, x1: 209, y0: 222, y1: 254, v: 1}], glyph = [];
+  for (const id in vis) {
+    if (!(vis[id] > 0)) continue;
+    for (const s of $(id).querySelectorAll('.ink')) {
+      if (s.parentElement.closest('.ink')) continue;
+      const host = s.closest('.mask > div') || s.closest('.fig') || s.closest('.src');
+      const o = host ? Number(host.style.opacity || 1) : 1;
+      if (!(o > 0.001)) continue;
+      const b = s.getBoundingClientRect();
+      rects.push({x0: b.left, x1: b.right, y0: b.top, y1: b.bottom, v: Math.min(1, o * 3)});
+      if (o > 0.5) glyph.push({x0: b.left, x1: b.right, y0: b.top + b.height * 0.12, y1: b.bottom - b.height * 0.12});
+    }
+  }
+
+  // ---------------- particles
+  for (let i = 0; i < paths.length; i++) paths[i] = new Path2D();
+  const a = [0, 0, 0], b = [0, 0, 0];
+  let inGlyph = 0, drawn = 0, blueDots = new Set(), whiteDots = new Set();
+  const fieldCam = camera(13);
+  for (let i = 0; i < N; i++) {
+    particleAt(i, t, wt);
+    const from = _from, to = _to, e = _e, landAge = _landAge;
+    project(cam, POS[0], POS[1], POS[2], a);
+    if (a[2] < 0.9 || a[0] < -40 || a[0] > W + 40 || a[1] < -40 || a[1] > H + 40) continue;
+    particleAt(i, tp, wtPrev); project(camPrev, POS[0], POS[1], POS[2], b);
+    const z = a[2];
+    // field weight (state 3): fixed equal dot size, no depth fade, uniform alpha
+    const fw = (to === 3 ? e : 0) + (from === 3 ? 1 - e : 0);
+    const dFade = lerp(smooth(seg(z, 0.9, 3.0)) * lerp(1, 0.4, smooth(seg(z, 16, 38))), 1, fw);
+    // the field's full alpha only applies once its 24 particles coincide; in flight they stay at the other state's level
+    const eA = to === 3 ? Math.pow(e, 24) : from === 3 ? 1 - Math.pow(1 - e, 24) : e;
+    const base = lerp(ALPHA[from], ALPHA[to], eA);
+    const isBlue = S[3].blue[i] ? 1 : 0;
+    // in the field, the 5 % stays visible but quieter; blue tint follows the split wave
+    const tint = isBlue ? (to === 3 ? splitAt(i, t) : from === 3 ? 1 - e : 0) : 0;
+    const fieldWhiteDim = !isBlue ? lerp(1, 0.55, fw) : 1;
+    let alpha = lerp(PS.bright[i], 1, fw) * base * dFade * fieldWhiteDim;
+    const flash = landAge >= 0 && landAge < 0.35 && to !== 3 ? 1 - landAge / 0.35 : 0;
+    alpha *= (1 + 0.9 * flash) * (1 - 0.85 * Math.sin(Math.PI * e));   // particles dim while in flight between states
+    if (to === 3) alpha *= lerp(0.3, 1, Math.pow(e, 24));   // converging field material stays quiet until each dot has formed
+    alpha *= keepOut(rects, a[0], a[1]);
+    if (alpha < 0.012) continue;
+    const size = lerp(Math.min(3.2, Math.max(1.0, 22 / z)), 5.2, fw) * (1 + 0.6 * flash);
+    const ci = tint > 0.5 ? 1 : 0;
+    const path = paths[ci * NB + nearestIdx(A_LEVELS, Math.min(0.85, alpha)) * S_LEVELS.length + nearestIdx(S_LEVELS, size)];
+    let dx = a[0] - b[0], dy = a[1] - b[1];
+    if (dx * dx + dy * dy < 0.04) { dx = 0.1; dy = 0; }
+    path.moveTo(a[0] - dx, a[1] - dy); path.lineTo(a[0], a[1]);
+    drawn++;
+    if (fw > 0.999) (ci ? blueDots : whiteDots).add(S[3].dotOf[i]);
+    for (const g of glyph) if (alpha > 0.03 && a[0] > g.x0 && a[0] < g.x1 && a[1] > g.y0 && a[1] < g.y1) { inGlyph++; break; }
+  }
+  stats.t = t; stats.drawn = drawn; stats.inGlyph = inGlyph; stats.particles = N;
+  stats.fieldBlueDots = blueDots.size; stats.fieldWhiteDots = whiteDots.size;
+
+  lctx.globalCompositeOperation = 'source-over'; lctx.globalAlpha = 1; lctx.clearRect(0, 0, W, H);
+  lctx.globalCompositeOperation = 'lighter'; lctx.lineCap = 'round';
+  for (let c = 0; c < 2; c++) { lctx.strokeStyle = COLORS[c];
+    for (let ai = 0; ai < A_LEVELS.length; ai++) for (let si = 0; si < S_LEVELS.length; si++) {
+      lctx.globalAlpha = A_LEVELS[ai]; lctx.lineWidth = S_LEVELS[si]; lctx.stroke(paths[c * NB + ai * S_LEVELS.length + si]); } }
+  bctx.globalCompositeOperation = 'copy'; bctx.filter = 'blur(6px)'; bctx.drawImage(layer, 0, 0, W / 4, H / 4); bctx.filter = 'none';
+  ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  const atm = 0.075 * smooth(seg(t, 0, 2));
+  const g = ctx.createRadialGradient(540, 1280, 0, 540, 1280, 900);
+  g.addColorStop(0, `rgba(170,188,255,${atm})`); g.addColorStop(0.45, `rgba(170,188,255,${atm / 3})`); g.addColorStop(1, 'rgba(170,188,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'lighter'; ctx.drawImage(layer, 0, 0);
+  ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = 0.75; ctx.drawImage(bloom, 0, 0, W, H);
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  gctx.fillStyle = gctx.createPattern(grainTiles[Math.round(t * FPS) % 4], 'repeat'); gctx.fillRect(0, 0, W, H);
+  return stats;
+};
+window.sceneReady = (async () => {
+  const want = [400, 600, 700, 800];
+  await Promise.all(want.map(w => document.fonts.load(`${w} 40px "Inter"`, 'US$1.5bn 95% 1GW')));
+  await document.fonts.ready;
+  const faces = [...document.fonts].filter(f => f.family.replace(/"/g, '') === 'Inter');
+  if (!faces.length || faces.some(f => f.status !== 'loaded')) throw new Error('Inter failed to load');
+  for (const w of want) if (!document.fonts.check(`${w} 40px "Inter"`)) throw new Error('Inter weight ' + w + ' missing');
+  const logo = $('logo');
+  if (!logo.complete || logo.naturalWidth === 0) await new Promise((res, rej) => { logo.onload = res; logo.onerror = () => rej(new Error('logo failed')); });
+  // line heights for the masked reveals, measured once while every block is still laid out
+  for (const el of document.querySelectorAll('.mask > div')) { el._h = el.offsetHeight; if (!(el._h > 0)) throw new Error('unmeasured mask line'); }
+  renderAt(0);
+  return {particles: N, fieldDots: 1000, fieldBlue: 950, particlesPerDot: FIELD.per};
+})();
+if (!/render=1/.test(location.search)) {
+  window.sceneReady.then(() => {
+    const m = location.search.match(/t=([\d.]+)/);
+    if (m) { renderAt(parseFloat(m[1])); return; }
+    const start = performance.now();
+    const loop = () => { renderAt(((performance.now() - start) / 1000) % DURATION); requestAnimationFrame(loop); }; loop();
+  });
+}
+</script>
+</body>
+</html>
